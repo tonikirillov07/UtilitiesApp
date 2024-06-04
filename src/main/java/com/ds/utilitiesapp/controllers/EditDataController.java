@@ -29,12 +29,25 @@ public class EditDataController {
     private VBox contentVbox;
 
     @FXML
+    private Button buttonDelete;
+
+    @FXML
     void initialize() {
         buttonNext.setFont(Font.loadFont(MainPage.class.getResourceAsStream(Constants.INTER_EXTRA_BOLD_FONT_INPUT_PATH), 14d));
+
+        buttonDelete.setFont(Font.loadFont(MainPage.class.getResourceAsStream(Constants.INTER_EXTRA_BOLD_FONT_INPUT_PATH), 14d));
+        buttonDelete.setStyle("-fx-background-color: rgb(187, 71, 71);");
     }
 
     private void closeStage(){
         ((Stage) buttonNext.getScene().getWindow()).close();
+    }
+
+    private void applyDeleteButton(long id, String tableName, String databasePath){
+        buttonDelete.setOnAction(actionEvent -> {
+            DatabaseService.deleteRecord(id, tableName, databasePath);
+            closeStage();
+        });
     }
 
     private boolean hasEmptyFields(ExtendedTextField[] extendedTextFields){
@@ -75,6 +88,7 @@ public class EditDataController {
 
                 closeStage();
             });
+            applyDeleteButton(agentRecord.getId(), Agents.TABLE_NAME, agentRecord.getDatabasePath());
         }catch (Exception e){
             ErrorDialog.show(e);
         }
@@ -110,6 +124,7 @@ public class EditDataController {
 
                 closeStage();
             });
+            applyDeleteButton(condolesRecord.getId(), Condoles.TABLE_NAME, condolesRecord.getDatabasePath());
         }catch (Exception e){
             ErrorDialog.show(e);
         }
@@ -140,6 +155,7 @@ public class EditDataController {
 
                 closeStage();
             });
+            applyDeleteButton(servicesRecord.getId(), Services.TABLE_NAME, servicesRecord.getDatabasePath());
         }catch (Exception e){
             ErrorDialog.show(e);
         }

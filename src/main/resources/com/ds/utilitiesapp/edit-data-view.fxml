@@ -18,6 +18,11 @@
             </VBox>
          </content>
       </ScrollPane>
+      <Button fx:id="buttonDelete" mnemonicParsing="false" prefHeight="37.0" prefWidth="214.0" styleClass="button-next" text="Удалить">
+         <effect>
+            <DropShadow />
+         </effect>
+      </Button>
       <Button fx:id="buttonNext" mnemonicParsing="false" prefHeight="37.0" prefWidth="214.0" styleClass="button-next" text="Далее">
          <VBox.margin>
             <Insets bottom="10.0" top="10.0" />

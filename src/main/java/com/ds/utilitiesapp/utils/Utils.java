@@ -83,31 +83,19 @@ public final class Utils {
         }
     }
 
+    private static @NotNull FileChooser createFileChooser(String title, List<FileChooser.ExtensionFilter> extensionFilterList){
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle(title);
+        fileChooser.getExtensionFilters().addAll(extensionFilterList);
+
+        return fileChooser;
+    }
+
     public static @Nullable File openFileDialog(String title, Stage stage, List<FileChooser.ExtensionFilter> extensionFilterList){
-        try {
-            FileChooser fileChooserImage = new FileChooser();
-            fileChooserImage.setTitle(title);
-            fileChooserImage.getExtensionFilters().addAll(extensionFilterList);
-
-            return fileChooserImage.showOpenDialog(stage);
-        }catch (Exception e){
-            ErrorDialog.show(e);
-        }
-
-        return null;
+        return createFileChooser(title, extensionFilterList).showOpenDialog(stage);
     }
 
     public static @Nullable File openSaveDialog(String title, Stage stage, List<FileChooser.ExtensionFilter> extensionFilterList){
-        try {
-            FileChooser fileChooserImage = new FileChooser();
-            fileChooserImage.setTitle(title);
-            fileChooserImage.getExtensionFilters().addAll(extensionFilterList);
-
-            return fileChooserImage.showSaveDialog(stage);
-        }catch (Exception e){
-            ErrorDialog.show(e);
-        }
-
-        return null;
+        return createFileChooser(title, extensionFilterList).showSaveDialog(stage);
     }
 }
