@@ -5,8 +5,6 @@ module com.ds.utilitiesapp {
     requires java.desktop;
     requires java.sql;
     requires jdk.compiler;
-    requires org.apache.commons.io;
-
 
     opens com.ds.utilitiesapp to javafx.fxml;
     exports com.ds.utilitiesapp;

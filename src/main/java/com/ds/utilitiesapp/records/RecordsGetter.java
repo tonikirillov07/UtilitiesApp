@@ -35,7 +35,7 @@ public class RecordsGetter {
             while (resultSet.next()){
                 agentRecords.add(new AgentRecord(Agents.TABLE_NAME, SettingsManager.getValue(Constants.CURRENT_DATABASE_FILE_KEY), resultSet.getLong(ID_ROW),
                         resultSet.getString(Agents.NAME_ROW), resultSet.getString(Agents.SURNAME_ROW), resultSet.getString(Agents.ADDRESS_ROW), resultSet.getString(Agents.TELEPHONE_ROW),
-                        resultSet.getInt(Agents.PERSONAL_CODE_ROW)));
+                        resultSet.getInt(Agents.PERSONAL_CODE_ROW), resultSet.getDouble(Agents.PAYMENTS_ROW)));
             }
 
             return agentRecords;
@@ -57,7 +57,7 @@ public class RecordsGetter {
             while (resultSet.next()){
                 condolesRecords.add(new CondolesRecord(Condoles.TABLE_NAME, SettingsManager.getValue(Constants.CURRENT_DATABASE_FILE_KEY), resultSet.getLong(ID_ROW),
                         resultSet.getString(Condoles.OWNER_NAME_ROW), resultSet.getInt(Condoles.PEOPLE_NUMBER_ROW), resultSet.getInt(Condoles.ROOMS_NUMBER_ROW),
-                        resultSet.getInt(Condoles.NUMBER_ROW)));
+                        resultSet.getInt(Condoles.NUMBER_ROW), resultSet.getDouble(Condoles.MAINTENANCE_AMOUNT_ROW)));
             }
 
             return condolesRecords;

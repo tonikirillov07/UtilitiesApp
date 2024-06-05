@@ -35,7 +35,6 @@ javafx {
 }
 
 dependencies {
-    implementation("commons-io:commons-io:2.16.1")
     implementation(files("libs/sqlite-jdbc-3.40.0.0.jar"))
     implementation("org.jetbrains:annotations:24.0.0")
     testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")

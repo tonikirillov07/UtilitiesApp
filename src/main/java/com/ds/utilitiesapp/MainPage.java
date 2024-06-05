@@ -1,16 +1,19 @@
 package com.ds.utilitiesapp;
 
+import com.ds.utilitiesapp.controllers.AddDataController;
 import com.ds.utilitiesapp.controllers.EditDataController;
 import com.ds.utilitiesapp.dialogs.ErrorDialog;
 import com.ds.utilitiesapp.records.*;
 import com.ds.utilitiesapp.records.Record;
 import com.ds.utilitiesapp.utils.AnotherScenes;
-import com.ds.utilitiesapp.utils.EditTypes;
+import com.ds.utilitiesapp.utils.RecordsTypes;
 import com.ds.utilitiesapp.utils.Utils;
 import com.ds.utilitiesapp.utils.settings.SettingsManager;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.layout.Priority;
@@ -34,6 +37,7 @@ public class MainPage {
     private final MenuBar menuBar;
     private final MenuButton categoryMenuButton;
     private final VBox mainVbox;
+    private RecordsTypes currentRecordType;
 
     public MainPage(Label categoryLabel, MenuBar menuBar, MenuButton categoryMenuButton, VBox mainVbox) {
         this.categoryLabel = categoryLabel;
@@ -95,6 +99,8 @@ public class MainPage {
 
     private void displayServices(){
         try{
+            currentRecordType = RecordsTypes.SERVICE;
+
             TableView<ServicesRecord> tableView = new TableView<>();
             applySettingForTableView(tableView);
 
@@ -112,8 +118,12 @@ public class MainPage {
 
             tableView.getColumns().addAll(servicesRecordIdTableColumn, servicesRecordNameTableColumn, servicesRecordCondoleNumberTableColumn, servicesRecordDateTableColumn);
             tableView.setOnMouseClicked(mouseEvent -> {
-                ServicesRecord servicesRecord = tableView.getItems().get(getSelectedRowIndexFromTableView(tableView));
-                openEditingScene(servicesRecord, EditTypes.SERVICE);
+                int cellIndex = getSelectedRowIndexFromTableView(tableView);
+                if(cellIndex < 0)
+                    return;
+
+                ServicesRecord servicesRecord = tableView.getItems().get(cellIndex);
+                openEditingScene(servicesRecord, RecordsTypes.SERVICE);
             });
             tableView.getItems().addAll(Objects.requireNonNull(RecordsGetter.getAllServicesRecords()));
         }catch (Exception e){
@@ -123,6 +133,8 @@ public class MainPage {
 
     private void displayCondoles(){
         try{
+            currentRecordType = RecordsTypes.CONDOLE;
+
             TableView<CondolesRecord> tableView = new TableView<>();
             applySettingForTableView(tableView);
 
@@ -141,11 +153,18 @@ public class MainPage {
             TableColumn<CondolesRecord, Integer> condolesRecordPeopleNumberTableColumn = new TableColumn<>("Количество жильцов");
             condolesRecordPeopleNumberTableColumn.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().getPeopleNumber()));
 
+            TableColumn<CondolesRecord, Double> condolesRecordMaintenanceAmountTableColumn = new TableColumn<>("Сумма за содержание");
+            condolesRecordMaintenanceAmountTableColumn.setCellValueFactory(cellData -> new SimpleDoubleProperty(cellData.getValue().getMaintenanceAmount()).asObject());
+
             tableView.getColumns().addAll(condolesRecordIdTableColumn, condolesRecordNumberTableColumn, condolesRecordOwnerNameTableColumn, condolesRecordRoomsNumberTableColumn,
-                    condolesRecordPeopleNumberTableColumn);
+                    condolesRecordPeopleNumberTableColumn, condolesRecordMaintenanceAmountTableColumn);
             tableView.setOnMouseClicked(mouseEvent -> {
-                CondolesRecord data = tableView.getItems().get(getSelectedRowIndexFromTableView(tableView));
-                openEditingScene(data, EditTypes.CONDOLE);
+                int cellIndex = getSelectedRowIndexFromTableView(tableView);
+                if(cellIndex < 0)
+                    return;
+
+                CondolesRecord data = tableView.getItems().get(cellIndex);
+                openEditingScene(data, RecordsTypes.CONDOLE);
             });
 
             tableView.getItems().addAll(Objects.requireNonNull(RecordsGetter.getAllCondolesRecords()));
@@ -155,12 +174,18 @@ public class MainPage {
     }
 
     private int getSelectedRowIndexFromTableView(@NotNull TableView tableView){
-        TablePosition tablePosition = (TablePosition) tableView.getSelectionModel().getSelectedCells().get(0);
+        ObservableList tablePositionObservableList = tableView.getSelectionModel().getSelectedCells();
+        if(tablePositionObservableList.isEmpty())
+            return -1;
+
+        TablePosition tablePosition = (TablePosition) tablePositionObservableList.get(0);
         return tablePosition.getRow();
     }
 
     private void displayAgents(){
         try {
+            currentRecordType = RecordsTypes.AGENT;
+
             TableView<AgentRecord> tableView = new TableView<>();
             applySettingForTableView(tableView);
 
@@ -182,11 +207,18 @@ public class MainPage {
             TableColumn<AgentRecord, String> agentRecordTelephoneTableColumn = new TableColumn<>("Телефон");
             agentRecordTelephoneTableColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getTelephone()));
 
+            TableColumn<AgentRecord, Double> agentRecordPaymentsTableColumn = new TableColumn<>("Выплаты");
+            agentRecordPaymentsTableColumn.setCellValueFactory(cellData -> new SimpleDoubleProperty(cellData.getValue().getPayments()).asObject());
+
             tableView.getColumns().addAll(agentRecordIdTableColumn, agentRecordNameTableColumn, agentRecordSurnameTableColumn, agentRecordPersonalCodeTableColumn, agentRecordAddressTableColumn,
-                    agentRecordTelephoneTableColumn);
+                    agentRecordTelephoneTableColumn, agentRecordPaymentsTableColumn);
             tableView.setOnMouseClicked(mouseEvent -> {
-                AgentRecord condolesRecord = tableView.getItems().get(getSelectedRowIndexFromTableView(tableView));
-                openEditingScene(condolesRecord, EditTypes.AGENT);
+                int cellIndex = getSelectedRowIndexFromTableView(tableView);
+                if(cellIndex < 0)
+                    return;
+
+                AgentRecord condolesRecord = tableView.getItems().get(cellIndex);
+                openEditingScene(condolesRecord, RecordsTypes.AGENT);
             });
             tableView.getItems().addAll(Objects.requireNonNull(RecordsGetter.getAllAgentRecords()));
         }catch (Exception e){
@@ -212,7 +244,10 @@ public class MainPage {
     private void initMenuData(@NotNull Menu menuData){
         try {
             MenuItem menuItemAdd = new MenuItem("Добавить");
-            menuItemAdd.setOnAction(actionEvent -> AnotherScenes.goToAnotherScene("add-data-view.fxml", "Добавить запись"));
+            menuItemAdd.setOnAction(actionEvent -> {
+                AddDataController addDataController = (AddDataController) AnotherScenes.goToAnotherScene("add-data-view.fxml", "Добавить запись");
+                addDataController.setOnClose(this::update);
+            });
 
             menuData.getItems().addAll(menuItemAdd);
         }catch (Exception e){
@@ -241,6 +276,17 @@ public class MainPage {
         }
     }
 
+    private void update(){
+        if(currentRecordType == null)
+            return;
+
+        switch (currentRecordType){
+            case CONDOLE -> displayCondoles();
+            case AGENT -> displayAgents();
+            case SERVICE -> displayServices();
+        }
+    }
+
     private void saveCurrentFile(){
         File selectedFile = openSaveDialog("Выберет файл для сохранения", getStage(), List.of(new FileChooser.ExtensionFilter("База данных", "*.db*")));
         if(selectedFile != null){
@@ -248,11 +294,13 @@ public class MainPage {
         }
     }
 
-    private void openEditingScene(Record record, @NotNull EditTypes editTypes){
+    private void openEditingScene(Record record, @NotNull RecordsTypes recordsTypes){
         EditDataController editDataController = (EditDataController) AnotherScenes.goToAnotherScene("edit-data-view.fxml", "Редактирование данных");
 
         assert editDataController != null;
-        switch (editTypes){
+        editDataController.setOnClose(this::update);
+
+        switch (recordsTypes){
             case AGENT -> editDataController.loadAgent((AgentRecord) record);
             case CONDOLE -> editDataController.loadCondole((CondolesRecord) record);
             case SERVICE -> editDataController.loadService((ServicesRecord) record);

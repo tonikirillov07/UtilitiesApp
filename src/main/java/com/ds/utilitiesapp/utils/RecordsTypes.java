@@ -1,6 +1,6 @@
 package com.ds.utilitiesapp.utils;
 
-public enum EditTypes {
+public enum RecordsTypes {
     AGENT,
     SERVICE,
     CONDOLE

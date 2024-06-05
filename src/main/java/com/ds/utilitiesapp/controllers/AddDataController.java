@@ -10,6 +10,7 @@ import com.ds.utilitiesapp.extendsNodes.ExtendedTextField;
 import com.ds.utilitiesapp.records.*;
 import com.ds.utilitiesapp.utils.InputTypes;
 import com.ds.utilitiesapp.utils.Utils;
+import com.ds.utilitiesapp.utils.actionListeners.IOnAction;
 import com.ds.utilitiesapp.utils.settings.SettingsManager;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -32,12 +33,17 @@ public class AddDataController {
 
     @FXML
     private Button nextButton;
+    private IOnAction onClose;
 
     @FXML
     void initialize() {
         initCategoryMenuButton();
 
         nextButton.setFont(Font.loadFont(MainPage.class.getResourceAsStream(Constants.INTER_EXTRA_BOLD_FONT_INPUT_PATH), 16d));
+    }
+
+    public void setOnClose(IOnAction onClose) {
+        this.onClose = onClose;
     }
 
     private void initCategoryMenuButton() {
@@ -76,20 +82,30 @@ public class AddDataController {
             ExtendedTextField extendedTextFieldPersonalCode = new ExtendedTextField(ExtendedTextField.DEFAULT_WIDTH, ExtendedTextField.DEFAULT_HEIGHT, "Персональный код", Utils.getImage("images/digits.png"));
             ExtendedTextField extendedTextFieldAddress = new ExtendedTextField(ExtendedTextField.DEFAULT_WIDTH, ExtendedTextField.DEFAULT_HEIGHT, "Адрес проживания", Utils.getImage("images/all_symbols.png"));
             ExtendedTextField extendedTextFieldTelephone = new ExtendedTextField(ExtendedTextField.DEFAULT_WIDTH, ExtendedTextField.DEFAULT_HEIGHT, "Телефон", Utils.getImage("images/telephone.png"));
+            ExtendedTextField extendedTextFieldPayments = new ExtendedTextField(ExtendedTextField.DEFAULT_WIDTH, ExtendedTextField.DEFAULT_HEIGHT, "Ежемесячные выплаты (руб.)", Utils.getImage("images/payments.png"));
 
             extendedTextFieldPersonalCode.setInputType(InputTypes.NUMERIC);
 
-            contentVbox.getChildren().addAll(extendedTextFieldName, extendedTextFieldSurname, extendedTextFieldPersonalCode, extendedTextFieldAddress, extendedTextFieldTelephone);
+            contentVbox.getChildren().addAll(extendedTextFieldName, extendedTextFieldSurname, extendedTextFieldPersonalCode, extendedTextFieldAddress, extendedTextFieldTelephone, extendedTextFieldPayments);
             nextButton.setOnAction(actionEvent -> {
-                List<ExtendedTextField> emptyFields = Utils.getEmptyFieldsFromArray(new ExtendedTextField[]{extendedTextFieldName, extendedTextFieldSurname, extendedTextFieldPersonalCode, extendedTextFieldAddress, extendedTextFieldTelephone});
-                emptyFields.forEach(ExtendedTextField::setError);
+                try {
+                    List<ExtendedTextField> emptyFields = Utils.getEmptyFieldsFromArray(new ExtendedTextField[]{extendedTextFieldName, extendedTextFieldSurname, extendedTextFieldPersonalCode, extendedTextFieldAddress, extendedTextFieldTelephone, extendedTextFieldPayments});
+                    emptyFields.forEach(ExtendedTextField::setError);
 
-                if(!emptyFields.isEmpty())
-                    return;
+                    if (!emptyFields.isEmpty())
+                        return;
 
-                RecordsWriter.addAgent(new AgentRecord(Agents.TABLE_NAME, SettingsManager.getValue(Constants.CURRENT_DATABASE_FILE_KEY), extendedTextFieldName.getText(), extendedTextFieldSurname.getText(),
-                        extendedTextFieldAddress.getText(), extendedTextFieldTelephone.getText(), Integer.parseInt(extendedTextFieldPersonalCode.getText())),  SettingsManager.getValue(Constants.CURRENT_DATABASE_FILE_KEY));
-                closeStage();
+                    if (AgentRecord.findAgentWithPersonalCode(Integer.parseInt(extendedTextFieldPersonalCode.getText()))) {
+                        ErrorDialog.show(new IllegalArgumentException("Агент с таким кодом уже существует"));
+                        return;
+                    }
+
+                    RecordsWriter.addAgent(new AgentRecord(Agents.TABLE_NAME, SettingsManager.getValue(Constants.CURRENT_DATABASE_FILE_KEY), extendedTextFieldName.getText(), extendedTextFieldSurname.getText(),
+                            extendedTextFieldAddress.getText(), extendedTextFieldTelephone.getText(), Integer.parseInt(extendedTextFieldPersonalCode.getText()), Double.parseDouble(extendedTextFieldPayments.getText())), SettingsManager.getValue(Constants.CURRENT_DATABASE_FILE_KEY));
+                    closeStage();
+                }catch (Exception e){
+                    ErrorDialog.show(e);
+                }
             });
         }catch (Exception e){
             ErrorDialog.show(e);
@@ -104,22 +120,32 @@ public class AddDataController {
             ExtendedTextField extendedTextFieldOwnerName = new ExtendedTextField(ExtendedTextField.DEFAULT_WIDTH, ExtendedTextField.DEFAULT_HEIGHT, "Имя владельца", Utils.getImage("images/user.png"));
             ExtendedTextField extendedTextFieldRoomsNumber = new ExtendedTextField(ExtendedTextField.DEFAULT_WIDTH, ExtendedTextField.DEFAULT_HEIGHT, "Количество комнат", Utils.getImage("images/digits.png"));
             ExtendedTextField extendedTextFieldPeopleNumber = new ExtendedTextField(ExtendedTextField.DEFAULT_WIDTH, ExtendedTextField.DEFAULT_HEIGHT, "Количество жильцов", Utils.getImage("images/digits.png"));
+            ExtendedTextField extendedTextFieldMaintenanceAmount = new ExtendedTextField(ExtendedTextField.DEFAULT_WIDTH, ExtendedTextField.DEFAULT_HEIGHT, "Сумма за содержание (руб.)", Utils.getImage("images/amount.png"));
 
             extendedTextFieldNumber.setInputType(InputTypes.NUMERIC);
             extendedTextFieldRoomsNumber.setInputType(InputTypes.NUMERIC);
             extendedTextFieldPeopleNumber.setInputType(InputTypes.NUMERIC);
 
-            contentVbox.getChildren().addAll(extendedTextFieldNumber, extendedTextFieldOwnerName, extendedTextFieldRoomsNumber, extendedTextFieldPeopleNumber);
+            contentVbox.getChildren().addAll(extendedTextFieldNumber, extendedTextFieldOwnerName, extendedTextFieldRoomsNumber, extendedTextFieldPeopleNumber, extendedTextFieldMaintenanceAmount);
             nextButton.setOnAction(actionEvent -> {
-                List<ExtendedTextField> emptyFields = Utils.getEmptyFieldsFromArray(new ExtendedTextField[]{extendedTextFieldNumber, extendedTextFieldOwnerName, extendedTextFieldRoomsNumber, extendedTextFieldPeopleNumber});
-                emptyFields.forEach(ExtendedTextField::setError);
+                try {
+                    List<ExtendedTextField> emptyFields = Utils.getEmptyFieldsFromArray(new ExtendedTextField[]{extendedTextFieldNumber, extendedTextFieldOwnerName, extendedTextFieldRoomsNumber, extendedTextFieldPeopleNumber, extendedTextFieldMaintenanceAmount});
+                    emptyFields.forEach(ExtendedTextField::setError);
 
-                if(!emptyFields.isEmpty())
-                    return;
+                    if (!emptyFields.isEmpty())
+                        return;
 
-                RecordsWriter.addCondole(new CondolesRecord(Condoles.TABLE_NAME, SettingsManager.getValue(Constants.CURRENT_DATABASE_FILE_KEY), Integer.parseInt(extendedTextFieldNumber.getText()),
-                        extendedTextFieldOwnerName.getText(), Integer.parseInt(extendedTextFieldPeopleNumber.getText()), Integer.parseInt(extendedTextFieldRoomsNumber.getText())), SettingsManager.getValue(Constants.CURRENT_DATABASE_FILE_KEY));
-                closeStage();
+                    if (CondolesRecord.findCondoleWithNumber(Integer.parseInt(extendedTextFieldNumber.getText()))) {
+                        ErrorDialog.show(new IllegalArgumentException("Квартира с таким номером уже существует"));
+                        return;
+                    }
+
+                    RecordsWriter.addCondole(new CondolesRecord(Condoles.TABLE_NAME, SettingsManager.getValue(Constants.CURRENT_DATABASE_FILE_KEY), Integer.parseInt(extendedTextFieldNumber.getText()),
+                            extendedTextFieldOwnerName.getText(), Integer.parseInt(extendedTextFieldPeopleNumber.getText()), Integer.parseInt(extendedTextFieldRoomsNumber.getText()), Double.parseDouble(extendedTextFieldMaintenanceAmount.getText())), SettingsManager.getValue(Constants.CURRENT_DATABASE_FILE_KEY));
+                    closeStage();
+                }catch (Exception e){
+                    ErrorDialog.show(e);
+                }
             });
         }catch (Exception e){
             ErrorDialog.show(e);
@@ -138,15 +164,19 @@ public class AddDataController {
 
             contentVbox.getChildren().addAll(extendedTextFieldName, extendedTextFieldCondoleNumber, extendedTextFieldDate);
             nextButton.setOnAction(actionEvent -> {
-                List<ExtendedTextField> emptyFields = Utils.getEmptyFieldsFromArray(new ExtendedTextField[]{extendedTextFieldName, extendedTextFieldCondoleNumber, extendedTextFieldDate});
-                emptyFields.forEach(ExtendedTextField::setError);
+                try {
+                    List<ExtendedTextField> emptyFields = Utils.getEmptyFieldsFromArray(new ExtendedTextField[]{extendedTextFieldName, extendedTextFieldCondoleNumber, extendedTextFieldDate});
+                    emptyFields.forEach(ExtendedTextField::setError);
 
-                if(!emptyFields.isEmpty())
-                    return;
+                    if (!emptyFields.isEmpty())
+                        return;
 
-                RecordsWriter.addService(new ServicesRecord(Services.TABLE_NAME, SettingsManager.getValue(Constants.CURRENT_DATABASE_FILE_KEY), extendedTextFieldName.getText(), extendedTextFieldDate.getText(),
-                        Integer.parseInt(extendedTextFieldCondoleNumber.getText())), SettingsManager.getValue(Constants.CURRENT_DATABASE_FILE_KEY));
-                closeStage();
+                    RecordsWriter.addService(new ServicesRecord(Services.TABLE_NAME, SettingsManager.getValue(Constants.CURRENT_DATABASE_FILE_KEY), extendedTextFieldName.getText(), extendedTextFieldDate.getText(),
+                            Integer.parseInt(extendedTextFieldCondoleNumber.getText())), SettingsManager.getValue(Constants.CURRENT_DATABASE_FILE_KEY));
+                    closeStage();
+                }catch (Exception e){
+                    ErrorDialog.show(e);
+                }
             });
         }catch (Exception e){
             ErrorDialog.show(e);
@@ -163,6 +193,8 @@ public class AddDataController {
     }
 
     private void closeStage(){
+        if(onClose != null)
+            onClose.onAction();
         ((Stage) nextButton.getScene().getWindow()).close();
     }
 

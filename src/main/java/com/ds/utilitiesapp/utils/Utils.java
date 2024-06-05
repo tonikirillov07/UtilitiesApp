@@ -14,7 +14,6 @@ import javafx.scene.image.Image;
 import javafx.scene.input.MouseButton;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import org.apache.commons.io.FileUtils;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -97,5 +96,9 @@ public final class Utils {
 
     public static @Nullable File openSaveDialog(String title, Stage stage, List<FileChooser.ExtensionFilter> extensionFilterList){
         return createFileChooser(title, extensionFilterList).showSaveDialog(stage);
+    }
+
+    public static double convertRubToDollars(double rubsValue){
+        return rubsValue * 0.011d;
     }
 }
