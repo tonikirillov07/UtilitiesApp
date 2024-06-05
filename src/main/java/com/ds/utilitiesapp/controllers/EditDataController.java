@@ -22,6 +22,8 @@ import javafx.stage.Stage;
 
 import java.util.List;
 
+import static com.ds.utilitiesapp.Constants.PHONE_NUMBER_REGEX;
+
 public class EditDataController {
     @FXML
     private Button buttonNext;
@@ -91,6 +93,15 @@ public class EditDataController {
                     if (hasEmptyFields(new ExtendedTextField[]{extendedTextFieldName, extendedTextFieldSurname, extendedTextFieldPersonalCode, extendedTextFieldAddress, extendedTextFieldTelephone, extendedTextFieldPayments}))
                         return;
 
+                    if(!extendedTextFieldTelephone.getText().matches(PHONE_NUMBER_REGEX)){
+                        extendedTextFieldTelephone.setError();
+                        ErrorDialog.show(new IllegalArgumentException("Введите корректный номер телефона"));
+                        return;
+                    }
+
+                    Integer.parseInt(extendedTextFieldPersonalCode.getText());
+                    Double.parseDouble(extendedTextFieldPayments.getText());
+
                     DatabaseService.changeValue(Agents.NAME_ROW, extendedTextFieldName.getText(), agentRecord.getId(), Agents.TABLE_NAME, agentRecord.getDatabasePath());
                     DatabaseService.changeValue(Agents.SURNAME_ROW, extendedTextFieldSurname.getText(), agentRecord.getId(), Agents.TABLE_NAME, agentRecord.getDatabasePath());
                     DatabaseService.changeValue(Agents.PERSONAL_CODE_ROW, extendedTextFieldPersonalCode.getText(), agentRecord.getId(), Agents.TABLE_NAME, agentRecord.getDatabasePath());
@@ -117,6 +128,7 @@ public class EditDataController {
             ExtendedTextField extendedTextFieldOwnerName = new ExtendedTextField(ExtendedTextField.DEFAULT_WIDTH, ExtendedTextField.DEFAULT_HEIGHT, "Имя владельца", Utils.getImage("images/user.png"));
             ExtendedTextField extendedTextFieldRoomsNumber = new ExtendedTextField(ExtendedTextField.DEFAULT_WIDTH, ExtendedTextField.DEFAULT_HEIGHT, "Количество комнат", Utils.getImage("images/digits.png"));
             ExtendedTextField extendedTextFieldPeopleNumber = new ExtendedTextField(ExtendedTextField.DEFAULT_WIDTH, ExtendedTextField.DEFAULT_HEIGHT, "Количество жильцов", Utils.getImage("images/digits.png"));
+            ExtendedTextField extendedTextFieldSquare = new ExtendedTextField(ExtendedTextField.DEFAULT_WIDTH, ExtendedTextField.DEFAULT_HEIGHT, "Площадь (м^2)", Utils.getImage("images/square.png"));
             ExtendedTextField extendedTextFieldMaintenanceAmount = new ExtendedTextField(ExtendedTextField.DEFAULT_WIDTH, ExtendedTextField.DEFAULT_HEIGHT, "Сумма за содержание (руб.)", Utils.getImage("images/amount.png"));
 
             extendedTextFieldNumber.setInputType(InputTypes.NUMERIC);
@@ -128,6 +140,7 @@ public class EditDataController {
             extendedTextFieldRoomsNumber.setText(String.valueOf(condolesRecord.getRoomsNumber()));
             extendedTextFieldPeopleNumber.setText(String.valueOf(condolesRecord.getPeopleNumber()));
             extendedTextFieldMaintenanceAmount.setText(String.valueOf(condolesRecord.getMaintenanceAmount()));
+            extendedTextFieldSquare.setText(String.valueOf(condolesRecord.getSquare()));
 
             contentVbox.getChildren().addAll(extendedTextFieldNumber, extendedTextFieldOwnerName, extendedTextFieldRoomsNumber, extendedTextFieldPeopleNumber, extendedTextFieldMaintenanceAmount);
             buttonNext.setOnAction(actionEvent -> {
@@ -135,11 +148,18 @@ public class EditDataController {
                     if (hasEmptyFields(new ExtendedTextField[]{extendedTextFieldNumber, extendedTextFieldOwnerName, extendedTextFieldRoomsNumber, extendedTextFieldPeopleNumber, extendedTextFieldMaintenanceAmount}))
                         return;
 
+                    Integer.parseInt(extendedTextFieldPeopleNumber.getText());
+                    Integer.parseInt(extendedTextFieldRoomsNumber.getText());
+                    Integer.parseInt(extendedTextFieldNumber.getText());
+                    Double.parseDouble(extendedTextFieldMaintenanceAmount.getText());
+                    Double.parseDouble(extendedTextFieldSquare.getText());
+
                     DatabaseService.changeValue(Condoles.NUMBER_ROW, extendedTextFieldNumber.getText(), condolesRecord.getId(), Condoles.TABLE_NAME, condolesRecord.getDatabasePath());
                     DatabaseService.changeValue(Condoles.OWNER_NAME_ROW, extendedTextFieldOwnerName.getText(), condolesRecord.getId(), Condoles.TABLE_NAME, condolesRecord.getDatabasePath());
                     DatabaseService.changeValue(Condoles.ROOMS_NUMBER_ROW, extendedTextFieldRoomsNumber.getText(), condolesRecord.getId(), Condoles.TABLE_NAME, condolesRecord.getDatabasePath());
                     DatabaseService.changeValue(Condoles.PEOPLE_NUMBER_ROW, extendedTextFieldPeopleNumber.getText(), condolesRecord.getId(), Condoles.TABLE_NAME, condolesRecord.getDatabasePath());
                     DatabaseService.changeValue(Condoles.MAINTENANCE_AMOUNT_ROW, extendedTextFieldMaintenanceAmount.getText(), condolesRecord.getId(), Condoles.TABLE_NAME, condolesRecord.getDatabasePath());
+                    DatabaseService.changeValue(Condoles.SQUARE_ROW, extendedTextFieldSquare.getText(), condolesRecord.getId(), Condoles.TABLE_NAME, condolesRecord.getDatabasePath());
 
                     closeStage();
                 }catch (Exception e){
@@ -171,6 +191,8 @@ public class EditDataController {
                 try {
                     if (hasEmptyFields(new ExtendedTextField[]{extendedTextFieldName, extendedTextFieldCondoleNumber, extendedTextFieldDate}))
                         return;
+
+                    Integer.parseInt(extendedTextFieldCondoleNumber.getText());
 
                     DatabaseService.changeValue(Services.NAME_ROW, extendedTextFieldName.getText(), servicesRecord.getId(), Services.TABLE_NAME, servicesRecord.getDatabasePath());
                     DatabaseService.changeValue(Services.CONDOLE_NUMBER_ROW, extendedTextFieldCondoleNumber.getText(), servicesRecord.getId(), Services.TABLE_NAME, servicesRecord.getDatabasePath());

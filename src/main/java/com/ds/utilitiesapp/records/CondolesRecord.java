@@ -15,24 +15,26 @@ import static com.ds.utilitiesapp.utils.Utils.convertRubToDollars;
 public class CondolesRecord extends Record{
     private String ownerName;
     private int peopleNumber, roomsNumber, number;
-    private double maintenanceAmount;
+    private double maintenanceAmount, square;
 
-    public CondolesRecord(String tableName, String databasePath, int number, String ownerName, int peopleNumber, int roomsNumber, double maintenanceAmount) {
+    public CondolesRecord(String tableName, String databasePath, int number, String ownerName, int peopleNumber, int roomsNumber, double maintenanceAmount, double square) {
         super(tableName, databasePath);
         this.number = number;
         this.ownerName = ownerName;
         this.peopleNumber = peopleNumber;
         this.roomsNumber = roomsNumber;
         this.maintenanceAmount = maintenanceAmount;
+        this.square = square;
     }
 
-    public CondolesRecord(String tableName, String databasePath, long id, String ownerName, int peopleNumber, int roomsNumber, int number, double maintenanceAmount) {
+    public CondolesRecord(String tableName, String databasePath, long id, String ownerName, int peopleNumber, int roomsNumber, int number, double maintenanceAmount, double square) {
         super(tableName, databasePath, id);
         this.ownerName = ownerName;
         this.peopleNumber = peopleNumber;
         this.roomsNumber = roomsNumber;
         this.number = number;
         this.maintenanceAmount = maintenanceAmount;
+        this.square = square;
     }
 
     public int getNumber() {
@@ -57,6 +59,14 @@ public class CondolesRecord extends Record{
         }
 
         return false;
+    }
+
+    public double getSquare() {
+        return square;
+    }
+
+    public void setSquare(double square) {
+        this.square = square;
     }
 
     public void setNumber(int number) {

@@ -22,6 +22,7 @@ import javafx.stage.Stage;
 
 import java.util.List;
 
+import static com.ds.utilitiesapp.Constants.PHONE_NUMBER_REGEX;
 import static com.ds.utilitiesapp.utils.Utils.defaultCategoryMenuItemsAction;
 
 public class AddDataController {
@@ -100,6 +101,12 @@ public class AddDataController {
                         return;
                     }
 
+                    if(!extendedTextFieldTelephone.getText().matches(PHONE_NUMBER_REGEX)){
+                        extendedTextFieldTelephone.setError();
+                        ErrorDialog.show(new IllegalArgumentException("Введите корректный номер телефона"));
+                        return;
+                    }
+
                     RecordsWriter.addAgent(new AgentRecord(Agents.TABLE_NAME, SettingsManager.getValue(Constants.CURRENT_DATABASE_FILE_KEY), extendedTextFieldName.getText(), extendedTextFieldSurname.getText(),
                             extendedTextFieldAddress.getText(), extendedTextFieldTelephone.getText(), Integer.parseInt(extendedTextFieldPersonalCode.getText()), Double.parseDouble(extendedTextFieldPayments.getText())), SettingsManager.getValue(Constants.CURRENT_DATABASE_FILE_KEY));
                     closeStage();
@@ -120,16 +127,17 @@ public class AddDataController {
             ExtendedTextField extendedTextFieldOwnerName = new ExtendedTextField(ExtendedTextField.DEFAULT_WIDTH, ExtendedTextField.DEFAULT_HEIGHT, "Имя владельца", Utils.getImage("images/user.png"));
             ExtendedTextField extendedTextFieldRoomsNumber = new ExtendedTextField(ExtendedTextField.DEFAULT_WIDTH, ExtendedTextField.DEFAULT_HEIGHT, "Количество комнат", Utils.getImage("images/digits.png"));
             ExtendedTextField extendedTextFieldPeopleNumber = new ExtendedTextField(ExtendedTextField.DEFAULT_WIDTH, ExtendedTextField.DEFAULT_HEIGHT, "Количество жильцов", Utils.getImage("images/digits.png"));
+            ExtendedTextField extendedTextFieldSquare = new ExtendedTextField(ExtendedTextField.DEFAULT_WIDTH, ExtendedTextField.DEFAULT_HEIGHT, "Площадь (м^2)", Utils.getImage("images/square.png"));
             ExtendedTextField extendedTextFieldMaintenanceAmount = new ExtendedTextField(ExtendedTextField.DEFAULT_WIDTH, ExtendedTextField.DEFAULT_HEIGHT, "Сумма за содержание (руб.)", Utils.getImage("images/amount.png"));
 
             extendedTextFieldNumber.setInputType(InputTypes.NUMERIC);
             extendedTextFieldRoomsNumber.setInputType(InputTypes.NUMERIC);
             extendedTextFieldPeopleNumber.setInputType(InputTypes.NUMERIC);
 
-            contentVbox.getChildren().addAll(extendedTextFieldNumber, extendedTextFieldOwnerName, extendedTextFieldRoomsNumber, extendedTextFieldPeopleNumber, extendedTextFieldMaintenanceAmount);
+            contentVbox.getChildren().addAll(extendedTextFieldNumber, extendedTextFieldOwnerName, extendedTextFieldRoomsNumber, extendedTextFieldPeopleNumber, extendedTextFieldSquare, extendedTextFieldMaintenanceAmount);
             nextButton.setOnAction(actionEvent -> {
                 try {
-                    List<ExtendedTextField> emptyFields = Utils.getEmptyFieldsFromArray(new ExtendedTextField[]{extendedTextFieldNumber, extendedTextFieldOwnerName, extendedTextFieldRoomsNumber, extendedTextFieldPeopleNumber, extendedTextFieldMaintenanceAmount});
+                    List<ExtendedTextField> emptyFields = Utils.getEmptyFieldsFromArray(new ExtendedTextField[]{extendedTextFieldNumber, extendedTextFieldOwnerName, extendedTextFieldRoomsNumber, extendedTextFieldPeopleNumber, extendedTextFieldMaintenanceAmount, extendedTextFieldSquare});
                     emptyFields.forEach(ExtendedTextField::setError);
 
                     if (!emptyFields.isEmpty())
@@ -141,7 +149,7 @@ public class AddDataController {
                     }
 
                     RecordsWriter.addCondole(new CondolesRecord(Condoles.TABLE_NAME, SettingsManager.getValue(Constants.CURRENT_DATABASE_FILE_KEY), Integer.parseInt(extendedTextFieldNumber.getText()),
-                            extendedTextFieldOwnerName.getText(), Integer.parseInt(extendedTextFieldPeopleNumber.getText()), Integer.parseInt(extendedTextFieldRoomsNumber.getText()), Double.parseDouble(extendedTextFieldMaintenanceAmount.getText())), SettingsManager.getValue(Constants.CURRENT_DATABASE_FILE_KEY));
+                            extendedTextFieldOwnerName.getText(), Integer.parseInt(extendedTextFieldPeopleNumber.getText()), Integer.parseInt(extendedTextFieldRoomsNumber.getText()), Double.parseDouble(extendedTextFieldMaintenanceAmount.getText()), Double.parseDouble(extendedTextFieldSquare.getText())), SettingsManager.getValue(Constants.CURRENT_DATABASE_FILE_KEY));
                     closeStage();
                 }catch (Exception e){
                     ErrorDialog.show(e);

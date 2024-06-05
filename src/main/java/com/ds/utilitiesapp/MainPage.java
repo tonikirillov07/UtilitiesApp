@@ -153,11 +153,14 @@ public class MainPage {
             TableColumn<CondolesRecord, Integer> condolesRecordPeopleNumberTableColumn = new TableColumn<>("Количество жильцов");
             condolesRecordPeopleNumberTableColumn.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().getPeopleNumber()));
 
+            TableColumn<CondolesRecord, Double> condolesRecordSquareTableColumn = new TableColumn<>("Площадь");
+            condolesRecordSquareTableColumn.setCellValueFactory(cellData -> new SimpleDoubleProperty(cellData.getValue().getSquare()).asObject());
+
             TableColumn<CondolesRecord, Double> condolesRecordMaintenanceAmountTableColumn = new TableColumn<>("Сумма за содержание");
             condolesRecordMaintenanceAmountTableColumn.setCellValueFactory(cellData -> new SimpleDoubleProperty(cellData.getValue().getMaintenanceAmount()).asObject());
 
             tableView.getColumns().addAll(condolesRecordIdTableColumn, condolesRecordNumberTableColumn, condolesRecordOwnerNameTableColumn, condolesRecordRoomsNumberTableColumn,
-                    condolesRecordPeopleNumberTableColumn, condolesRecordMaintenanceAmountTableColumn);
+                    condolesRecordPeopleNumberTableColumn, condolesRecordSquareTableColumn, condolesRecordMaintenanceAmountTableColumn);
             tableView.setOnMouseClicked(mouseEvent -> {
                 int cellIndex = getSelectedRowIndexFromTableView(tableView);
                 if(cellIndex < 0)
@@ -174,12 +177,18 @@ public class MainPage {
     }
 
     private int getSelectedRowIndexFromTableView(@NotNull TableView tableView){
-        ObservableList tablePositionObservableList = tableView.getSelectionModel().getSelectedCells();
-        if(tablePositionObservableList.isEmpty())
-            return -1;
+        try {
+            ObservableList tablePositionObservableList = tableView.getSelectionModel().getSelectedCells();
+            if (tablePositionObservableList.isEmpty())
+                return -1;
 
-        TablePosition tablePosition = (TablePosition) tablePositionObservableList.get(0);
-        return tablePosition.getRow();
+            TablePosition tablePosition = (TablePosition) tablePositionObservableList.get(0);
+            return tablePosition.getRow();
+        }catch (Exception e){
+            ErrorDialog.show(e);
+        }
+
+        return -1;
     }
 
     private void displayAgents(){

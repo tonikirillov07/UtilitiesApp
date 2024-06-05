@@ -30,13 +30,14 @@ public class RecordsWriter {
 
     public static void addCondole(CondolesRecord condolesRecord, String databasePath){
         try {
-            String add = "INSERT INTO " + Condoles.TABLE_NAME + "(" + Condoles.NUMBER_ROW + "," + Condoles.OWNER_NAME_ROW + "," + Condoles.ROOMS_NUMBER_ROW + "," + Condoles.PEOPLE_NUMBER_ROW + "," + Condoles.MAINTENANCE_AMOUNT_ROW + ") VALUES(?,?,?,?,?)";
+            String add = "INSERT INTO " + Condoles.TABLE_NAME + "(" + Condoles.NUMBER_ROW + "," + Condoles.OWNER_NAME_ROW + "," + Condoles.ROOMS_NUMBER_ROW + "," + Condoles.PEOPLE_NUMBER_ROW + "," + Condoles.MAINTENANCE_AMOUNT_ROW + "," + Condoles.SQUARE_ROW + ") VALUES(?,?,?,?,?,?)";
             PreparedStatement preparedStatement = Objects.requireNonNull(DatabaseService.getConnection(databasePath)).prepareStatement(add);
             preparedStatement.setInt(1, condolesRecord.getNumber());
             preparedStatement.setString(2, condolesRecord.getOwnerName());
             preparedStatement.setInt(3, condolesRecord.getRoomsNumber());
             preparedStatement.setInt(4, condolesRecord.getPeopleNumber());
             preparedStatement.setDouble(5, condolesRecord.getMaintenanceAmount());
+            preparedStatement.setDouble(6, condolesRecord.getSquare());
 
             preparedStatement.executeUpdate();
             preparedStatement.close();

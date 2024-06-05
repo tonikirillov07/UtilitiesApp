@@ -57,7 +57,7 @@ public class RecordsGetter {
             while (resultSet.next()){
                 condolesRecords.add(new CondolesRecord(Condoles.TABLE_NAME, SettingsManager.getValue(Constants.CURRENT_DATABASE_FILE_KEY), resultSet.getLong(ID_ROW),
                         resultSet.getString(Condoles.OWNER_NAME_ROW), resultSet.getInt(Condoles.PEOPLE_NUMBER_ROW), resultSet.getInt(Condoles.ROOMS_NUMBER_ROW),
-                        resultSet.getInt(Condoles.NUMBER_ROW), resultSet.getDouble(Condoles.MAINTENANCE_AMOUNT_ROW)));
+                        resultSet.getInt(Condoles.NUMBER_ROW), resultSet.getDouble(Condoles.MAINTENANCE_AMOUNT_ROW), resultSet.getDouble(Condoles.SQUARE_ROW)));
             }
 
             return condolesRecords;
