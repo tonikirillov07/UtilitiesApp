@@ -19,10 +19,11 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-import static com.ds.utilitiesapp.Constants.PHONE_NUMBER_REGEX;
+import static com.ds.utilitiesapp.Constants.*;
 import static com.ds.utilitiesapp.utils.Utils.defaultCategoryMenuItemsAction;
 
 public class AddDataController {
@@ -119,6 +120,16 @@ public class AddDataController {
         }
     }
 
+    private static double calculateMaintenanceAmount(double square, int peopleNumber, int roomsNumber){
+        return (square * ONE_QUAD_METER_COST) + (roomsNumber * ONE_ROOM_COST) + (peopleNumber * ONE_PEOPLE_COST);
+    }
+
+    public static void setMaintenanceAmountTextInTextField(@NotNull ExtendedTextField extendedTextFieldRoomsNumber, @NotNull ExtendedTextField extendedTextFieldPeopleNumber, @NotNull ExtendedTextField extendedTextFieldSquare, ExtendedTextField extendedTextFieldMaintenanceAmount){
+        if(!extendedTextFieldSquare.isEmpty() & !extendedTextFieldPeopleNumber.isEmpty() & !extendedTextFieldRoomsNumber.isEmpty())
+            extendedTextFieldMaintenanceAmount.setText(String.valueOf(calculateMaintenanceAmount(Double.parseDouble(extendedTextFieldSquare.getText()),
+                    Integer.parseInt(extendedTextFieldPeopleNumber.getText()), Integer.parseInt(extendedTextFieldRoomsNumber.getText()))));
+    }
+
     private void loadCondolesComponents(){
         try {
             clearContentVBox();
@@ -133,6 +144,11 @@ public class AddDataController {
             extendedTextFieldNumber.setInputType(InputTypes.NUMERIC);
             extendedTextFieldRoomsNumber.setInputType(InputTypes.NUMERIC);
             extendedTextFieldPeopleNumber.setInputType(InputTypes.NUMERIC);
+            extendedTextFieldMaintenanceAmount.getTextField().setEditable(false);
+
+            extendedTextFieldRoomsNumber.setOnTextTyping(text -> setMaintenanceAmountTextInTextField(extendedTextFieldRoomsNumber, extendedTextFieldPeopleNumber, extendedTextFieldSquare, extendedTextFieldMaintenanceAmount));
+            extendedTextFieldSquare.setOnTextTyping(text -> setMaintenanceAmountTextInTextField(extendedTextFieldRoomsNumber, extendedTextFieldPeopleNumber, extendedTextFieldSquare, extendedTextFieldMaintenanceAmount));
+            extendedTextFieldPeopleNumber.setOnTextTyping(text -> setMaintenanceAmountTextInTextField(extendedTextFieldRoomsNumber, extendedTextFieldPeopleNumber, extendedTextFieldSquare, extendedTextFieldMaintenanceAmount));
 
             contentVbox.getChildren().addAll(extendedTextFieldNumber, extendedTextFieldOwnerName, extendedTextFieldRoomsNumber, extendedTextFieldPeopleNumber, extendedTextFieldSquare, extendedTextFieldMaintenanceAmount);
             nextButton.setOnAction(actionEvent -> {

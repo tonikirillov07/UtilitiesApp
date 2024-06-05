@@ -4,6 +4,7 @@ import com.ds.utilitiesapp.Constants;
 import com.ds.utilitiesapp.Main;
 import com.ds.utilitiesapp.utils.InputTypes;
 import com.ds.utilitiesapp.utils.actionListeners.IOnAction;
+import com.ds.utilitiesapp.utils.actionListeners.IOnTextTyping;
 import javafx.animation.TranslateTransition;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -31,6 +32,7 @@ public class ExtendedTextField extends HBox {
     private final Image fieldIcon;
     public static final double DEFAULT_WIDTH = 315d;
     public static final double DEFAULT_HEIGHT = 37d;
+    private IOnTextTyping onTextTyping;
 
     public ExtendedTextField(double width, double height, String placeholder, Image fieldIcon) {
         this.width = width;
@@ -51,12 +53,19 @@ public class ExtendedTextField extends HBox {
         init();
     }
 
+    public void setOnTextTyping(IOnTextTyping onTextTyping) {
+        this.onTextTyping = onTextTyping;
+    }
+
     public void setInputType(InputTypes inputType){
         if(inputType == InputTypes.NUMERIC) {
             getTextField().setOnKeyTyped(keyEvent -> {
                 if(!getCharactersList().stream().allMatch(Character::isDigit)){
                     removeAllButDigits();
                 }
+
+                if(onTextTyping != null)
+                    onTextTyping.onTextTyping(getText());
             });
         }
     }
@@ -137,11 +146,20 @@ public class ExtendedTextField extends HBox {
             if (!defaultValue.isEmpty())
                 textField.setText(defaultValue);
 
+        textField.setOnKeyTyped(keyEvent -> {
+            if(onTextTyping != null)
+                onTextTyping.onTextTyping(getText());
+        });
+
         getChildren().add(textField);
     }
 
     public void setText(String text){
         getTextField().setText(text);
+    }
+
+    public boolean isEmpty(){
+        return getText().isEmpty();
     }
 
     public String getText(){

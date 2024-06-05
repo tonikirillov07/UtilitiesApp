@@ -2,11 +2,11 @@ package com.ds.utilitiesapp;
 
 import com.ds.utilitiesapp.utils.Utils;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
@@ -25,10 +25,17 @@ public class Main extends Application {
             stage.setTitle(WINDOW_TITLE);
             stage.getIcons().add(Utils.getImage("images/icon/window_icon.png"));
             stage.setScene(scene);
+            stage.setOnCloseRequest(windowEvent -> close(stage));
             stage.show();
         }catch (Exception e){
             JOptionPane.showMessageDialog(null, e.toString(), "An exception has occurred", JOptionPane.ERROR_MESSAGE);
         }
+    }
+
+    private void close(@NotNull Stage stage){
+        stage.close();
+        Platform.exit();
+        System.exit(0);
     }
 
     public static void main(String[] args) {

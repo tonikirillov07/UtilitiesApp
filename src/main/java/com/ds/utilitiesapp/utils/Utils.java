@@ -25,6 +25,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
+import static com.ds.utilitiesapp.Constants.ONE_DOLLAR;
+
 public final class Utils {
     @Contract("_ -> new")
     public static @Nullable Image getImage(String path){
@@ -99,6 +101,6 @@ public final class Utils {
     }
 
     public static double convertRubToDollars(double rubsValue){
-        return rubsValue * 0.011d;
+        return rubsValue * ONE_DOLLAR;
     }
 }

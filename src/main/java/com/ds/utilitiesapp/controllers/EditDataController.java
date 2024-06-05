@@ -23,6 +23,7 @@ import javafx.stage.Stage;
 import java.util.List;
 
 import static com.ds.utilitiesapp.Constants.PHONE_NUMBER_REGEX;
+import static com.ds.utilitiesapp.controllers.AddDataController.setMaintenanceAmountTextInTextField;
 
 public class EditDataController {
     @FXML
@@ -141,6 +142,11 @@ public class EditDataController {
             extendedTextFieldPeopleNumber.setText(String.valueOf(condolesRecord.getPeopleNumber()));
             extendedTextFieldMaintenanceAmount.setText(String.valueOf(condolesRecord.getMaintenanceAmount()));
             extendedTextFieldSquare.setText(String.valueOf(condolesRecord.getSquare()));
+
+            extendedTextFieldRoomsNumber.setOnTextTyping(text -> setMaintenanceAmountTextInTextField(extendedTextFieldRoomsNumber, extendedTextFieldPeopleNumber, extendedTextFieldSquare, extendedTextFieldMaintenanceAmount));
+            extendedTextFieldSquare.setOnTextTyping(text -> setMaintenanceAmountTextInTextField(extendedTextFieldRoomsNumber, extendedTextFieldPeopleNumber, extendedTextFieldSquare, extendedTextFieldMaintenanceAmount));
+            extendedTextFieldPeopleNumber.setOnTextTyping(text -> setMaintenanceAmountTextInTextField(extendedTextFieldRoomsNumber, extendedTextFieldPeopleNumber, extendedTextFieldSquare, extendedTextFieldMaintenanceAmount));
+
 
             contentVbox.getChildren().addAll(extendedTextFieldNumber, extendedTextFieldOwnerName, extendedTextFieldRoomsNumber, extendedTextFieldPeopleNumber, extendedTextFieldMaintenanceAmount);
             buttonNext.setOnAction(actionEvent -> {
