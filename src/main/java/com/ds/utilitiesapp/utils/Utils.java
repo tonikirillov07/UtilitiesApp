@@ -103,4 +103,24 @@ public final class Utils {
     public static double convertRubToDollars(double rubsValue){
         return rubsValue * ONE_DOLLAR;
     }
+    public static boolean checkPhoneNumber(@NotNull String phoneNumber){
+        if(phoneNumber.length() < 10){
+            ErrorDialog.show(new Exception("Введите корректный номер телефона. Длина телефона меньше 10"));
+            return false;
+        }
+
+        if(!phoneNumber.contains("+")){
+            ErrorDialog.show(new Exception("Введите корректный номер телефона. Номер не содержит +"));
+            return false;
+        }
+
+        for (char c : phoneNumber.toCharArray()) {
+            if(!Character.isDigit(c) & c != '+'){
+                ErrorDialog.show(new Exception("Введите корректный номер телефона. Неподдерживаемые символы"));
+                return false;
+            }
+        }
+
+        return true;
+    }
 }

@@ -22,8 +22,8 @@ import javafx.stage.Stage;
 
 import java.util.List;
 
-import static com.ds.utilitiesapp.Constants.PHONE_NUMBER_REGEX;
 import static com.ds.utilitiesapp.controllers.AddDataController.setMaintenanceAmountTextInTextField;
+import static com.ds.utilitiesapp.utils.Utils.checkPhoneNumber;
 
 public class EditDataController {
     @FXML
@@ -94,9 +94,7 @@ public class EditDataController {
                     if (hasEmptyFields(new ExtendedTextField[]{extendedTextFieldName, extendedTextFieldSurname, extendedTextFieldPersonalCode, extendedTextFieldAddress, extendedTextFieldTelephone, extendedTextFieldPayments}))
                         return;
 
-                    if(!extendedTextFieldTelephone.getText().matches(PHONE_NUMBER_REGEX)){
-                        extendedTextFieldTelephone.setError();
-                        ErrorDialog.show(new IllegalArgumentException("Введите корректный номер телефона"));
+                    if(!checkPhoneNumber(extendedTextFieldTelephone.getText())) {
                         return;
                     }
 

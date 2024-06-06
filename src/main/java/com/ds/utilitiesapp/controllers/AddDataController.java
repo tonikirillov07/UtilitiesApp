@@ -24,6 +24,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 import static com.ds.utilitiesapp.Constants.*;
+import static com.ds.utilitiesapp.utils.Utils.checkPhoneNumber;
 import static com.ds.utilitiesapp.utils.Utils.defaultCategoryMenuItemsAction;
 
 public class AddDataController {
@@ -102,11 +103,8 @@ public class AddDataController {
                         return;
                     }
 
-                    if(!extendedTextFieldTelephone.getText().matches(PHONE_NUMBER_REGEX)){
-                        extendedTextFieldTelephone.setError();
-                        ErrorDialog.show(new IllegalArgumentException("Введите корректный номер телефона"));
+                    if(!checkPhoneNumber(extendedTextFieldTelephone.getText()))
                         return;
-                    }
 
                     RecordsWriter.addAgent(new AgentRecord(Agents.TABLE_NAME, SettingsManager.getValue(Constants.CURRENT_DATABASE_FILE_KEY), extendedTextFieldName.getText(), extendedTextFieldSurname.getText(),
                             extendedTextFieldAddress.getText(), extendedTextFieldTelephone.getText(), Integer.parseInt(extendedTextFieldPersonalCode.getText()), Double.parseDouble(extendedTextFieldPayments.getText())), SettingsManager.getValue(Constants.CURRENT_DATABASE_FILE_KEY));
