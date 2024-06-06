@@ -1,8 +1,8 @@
 package com.ds.utilitiesapp.utils;
 
 import com.ds.utilitiesapp.Main;
+import com.ds.utilitiesapp.MainPage;
 import com.ds.utilitiesapp.dialogs.ErrorDialog;
-import com.ds.utilitiesapp.utils.actionListeners.IOnAction;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -17,8 +17,9 @@ public final class AnotherScenes {
             fxmlLoader.load();
 
             Parent root = fxmlLoader.getRoot();
+            Scene scene = new Scene(root);
             Stage stage = new Stage();
-            stage.setScene(new Scene(root));
+            stage.setScene(scene);
             stage.setTitle(name);
             stage.setResizable(true);
 

@@ -1,7 +1,6 @@
 package com.ds.utilitiesapp.controllers;
 
 import com.ds.utilitiesapp.MainPage;
-import com.ds.utilitiesapp.dialogs.ErrorDialog;
 import com.ds.utilitiesapp.utils.Utils;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -34,12 +33,6 @@ public class MainController {
     }
 
     private void initBackground() {
-        try {
-            BackgroundImage backgroundImage = new BackgroundImage(Utils.getImage("images/background.png"),
-                    BackgroundRepeat.REPEAT, BackgroundRepeat.ROUND, BackgroundPosition.DEFAULT, new BackgroundSize(WINDOW_WIDTH, WINDOW_HEIGHT, false, false, true, true));
-            mainVbox.setBackground(new Background(backgroundImage));
-        } catch (Exception e) {
-            ErrorDialog.show(e);
-        }
+        Utils.applyBackground(mainVbox, "images/background.png", WINDOW_WIDTH, WINDOW_HEIGHT);
     }
 }

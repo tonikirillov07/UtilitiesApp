@@ -5,6 +5,7 @@
     <file url="file://$PROJECT_DIR$/src/main/java/com/ds/utilitiesapp/Main.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java/com/ds/utilitiesapp/MainPage.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java/com/ds/utilitiesapp/controllers/AddDataController.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/ds/utilitiesapp/controllers/ContactsController.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java/com/ds/utilitiesapp/controllers/EditDataController.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java/com/ds/utilitiesapp/dialogs/InfoDialog.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java/com/ds/utilitiesapp/utils/Utils.java" charset="UTF-8" />

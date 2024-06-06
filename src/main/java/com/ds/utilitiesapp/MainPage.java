@@ -239,12 +239,25 @@ public class MainPage {
         try {
             Menu menuFile = new Menu("Файл");
             Menu menuData = new Menu("Данные");
+            Menu menuHelp = new Menu("Помощь");
 
             menuBar.getMenus().clear();
-            menuBar.getMenus().addAll(menuFile, menuData);
+            menuBar.getMenus().addAll(menuFile, menuData, menuHelp);
 
             initMenuFile(menuFile);
             initMenuData(menuData);
+            initMenuHelp(menuHelp);
+        }catch (Exception e){
+            ErrorDialog.show(e);
+        }
+    }
+
+    private void initMenuHelp(Menu menuHelp) {
+        try{
+            MenuItem menuItemContacts = new MenuItem("Контакты");
+            menuItemContacts.setOnAction(actionEvent -> AnotherScenes.goToAnotherScene("help-view.fxml", "Контакты"));
+
+            menuHelp.getItems().add(menuItemContacts);
         }catch (Exception e){
             ErrorDialog.show(e);
         }

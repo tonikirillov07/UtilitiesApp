@@ -12,6 +12,7 @@ import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseButton;
+import javafx.scene.layout.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.jetbrains.annotations.Contract;
@@ -25,7 +26,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-import static com.ds.utilitiesapp.Constants.ONE_DOLLAR;
+import static com.ds.utilitiesapp.Constants.*;
 
 public final class Utils {
     @Contract("_ -> new")
@@ -98,6 +99,16 @@ public final class Utils {
 
     public static @Nullable File openSaveDialog(String title, Stage stage, List<FileChooser.ExtensionFilter> extensionFilterList){
         return createFileChooser(title, extensionFilterList).showSaveDialog(stage);
+    }
+
+    public static void applyBackground(Pane pane, String path, double width, double height){
+        try {
+            BackgroundImage backgroundImage = new BackgroundImage(Utils.getImage(path),
+                    BackgroundRepeat.REPEAT, BackgroundRepeat.ROUND, BackgroundPosition.DEFAULT, new BackgroundSize(width, height, false, false, true, true));
+            pane.setBackground(new Background(backgroundImage));
+        } catch (Exception e) {
+            ErrorDialog.show(e);
+        }
     }
 
     public static double convertRubToDollars(double rubsValue){
