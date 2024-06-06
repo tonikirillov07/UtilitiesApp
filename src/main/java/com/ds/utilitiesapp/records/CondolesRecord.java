@@ -17,6 +17,11 @@ public class CondolesRecord extends Record{
     private int peopleNumber, roomsNumber, number;
     private double maintenanceAmount, square;
 
+    public CondolesRecord(){
+        super(null, null);
+
+    }
+
     public CondolesRecord(String tableName, String databasePath, int number, String ownerName, int peopleNumber, int roomsNumber, double maintenanceAmount, double square) {
         super(tableName, databasePath);
         this.number = number;
@@ -48,7 +53,6 @@ public class CondolesRecord extends Record{
             ResultSet resultSet = preparedStatement.executeQuery();
 
             boolean isThisCondoleExists = resultSet.next();
-            System.out.println(isThisCondoleExists);
 
             resultSet.close();
             preparedStatement.close();

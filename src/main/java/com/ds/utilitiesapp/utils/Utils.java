@@ -19,6 +19,9 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 import java.io.File;
 import java.nio.file.Files;
 import java.util.ArrayList;
@@ -29,6 +32,11 @@ import java.util.Objects;
 import static com.ds.utilitiesapp.Constants.*;
 
 public final class Utils {
+    public static void copyString(String string){
+        Clipboard systemClipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+        systemClipboard.setContents(new StringSelection(string), null);
+    }
+
     @Contract("_ -> new")
     public static @Nullable Image getImage(String path){
         try {

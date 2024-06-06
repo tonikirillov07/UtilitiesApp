@@ -17,6 +17,11 @@ public class AgentRecord extends Record{
     private int personalCode;
     private double payments;
 
+    public AgentRecord(){
+        super(null, null);
+
+    }
+
     public AgentRecord(String tableName, String databasePath, String name, String surname, String address, String telephone, int personalCode, double payments) {
         super(tableName, databasePath);
         this.name = name;

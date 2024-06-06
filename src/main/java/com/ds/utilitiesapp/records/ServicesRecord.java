@@ -4,6 +4,10 @@ public class ServicesRecord extends Record{
     private String name, date;
     private int condoleNumber;
 
+    public ServicesRecord(){
+        super(null, null);
+    }
+
     public ServicesRecord(String tableName, String databasePath, String name, String date, int condoleNumber) {
         super(tableName, databasePath);
         this.name = name;
