@@ -10,7 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.Objects;
 
-import static com.ds.utilitiesapp.utils.Utils.convertRubToDollars;
+import static com.ds.utilitiesapp.utils.Utils.convertMdlToDollars;
 
 public class AgentRecord extends Record{
     private String name, surname, address, telephone;
@@ -62,7 +62,7 @@ public class AgentRecord extends Record{
     }
 
     public double getPaymentInDollars(){
-        return convertRubToDollars(getPayments());
+        return convertMdlToDollars(getPayments());
     }
 
     public void setPayments(double payments) {

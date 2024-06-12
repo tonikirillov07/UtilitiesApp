@@ -119,8 +119,8 @@ public final class Utils {
         }
     }
 
-    public static double convertRubToDollars(double rubsValue){
-        return rubsValue * ONE_DOLLAR;
+    public static double convertMdlToDollars(double mdlValue){
+        return mdlValue * ONE_DOLLAR;
     }
     public static boolean checkPhoneNumber(@NotNull String phoneNumber){
         if(phoneNumber.length() < 10){

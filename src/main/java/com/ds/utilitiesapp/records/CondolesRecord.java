@@ -10,7 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.Objects;
 
-import static com.ds.utilitiesapp.utils.Utils.convertRubToDollars;
+import static com.ds.utilitiesapp.utils.Utils.convertMdlToDollars;
 
 public class CondolesRecord extends Record{
     private String ownerName;
@@ -106,7 +106,7 @@ public class CondolesRecord extends Record{
     }
 
     public double getMaintenanceAmountInDollars() {
-        return convertRubToDollars(getMaintenanceAmount());
+        return convertMdlToDollars(getMaintenanceAmount());
     }
 
     public void setMaintenanceAmount(double maintenanceAmount) {

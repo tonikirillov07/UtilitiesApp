@@ -85,7 +85,7 @@ public class AddDataController {
             ExtendedTextField extendedTextFieldPersonalCode = new ExtendedTextField(ExtendedTextField.DEFAULT_WIDTH, ExtendedTextField.DEFAULT_HEIGHT, "Персональный код", Utils.getImage("images/digits.png"));
             ExtendedTextField extendedTextFieldAddress = new ExtendedTextField(ExtendedTextField.DEFAULT_WIDTH, ExtendedTextField.DEFAULT_HEIGHT, "Адрес проживания", Utils.getImage("images/all_symbols.png"));
             ExtendedTextField extendedTextFieldTelephone = new ExtendedTextField(ExtendedTextField.DEFAULT_WIDTH, ExtendedTextField.DEFAULT_HEIGHT, "Телефон", Utils.getImage("images/telephone.png"));
-            ExtendedTextField extendedTextFieldPayments = new ExtendedTextField(ExtendedTextField.DEFAULT_WIDTH, ExtendedTextField.DEFAULT_HEIGHT, "Ежемесячные выплаты (руб.)", Utils.getImage("images/payments.png"));
+            ExtendedTextField extendedTextFieldPayments = new ExtendedTextField(ExtendedTextField.DEFAULT_WIDTH, ExtendedTextField.DEFAULT_HEIGHT, "Ежемесячные выплаты (mdl)", Utils.getImage("images/payments.png"));
 
             extendedTextFieldPersonalCode.setInputType(InputTypes.NUMERIC);
 
@@ -137,7 +137,7 @@ public class AddDataController {
             ExtendedTextField extendedTextFieldRoomsNumber = new ExtendedTextField(ExtendedTextField.DEFAULT_WIDTH, ExtendedTextField.DEFAULT_HEIGHT, "Количество комнат", Utils.getImage("images/digits.png"));
             ExtendedTextField extendedTextFieldPeopleNumber = new ExtendedTextField(ExtendedTextField.DEFAULT_WIDTH, ExtendedTextField.DEFAULT_HEIGHT, "Количество жильцов", Utils.getImage("images/digits.png"));
             ExtendedTextField extendedTextFieldSquare = new ExtendedTextField(ExtendedTextField.DEFAULT_WIDTH, ExtendedTextField.DEFAULT_HEIGHT, "Площадь (м^2)", Utils.getImage("images/square.png"));
-            ExtendedTextField extendedTextFieldMaintenanceAmount = new ExtendedTextField(ExtendedTextField.DEFAULT_WIDTH, ExtendedTextField.DEFAULT_HEIGHT, "Сумма за содержание (руб.)", Utils.getImage("images/amount.png"));
+            ExtendedTextField extendedTextFieldMaintenanceAmount = new ExtendedTextField(ExtendedTextField.DEFAULT_WIDTH, ExtendedTextField.DEFAULT_HEIGHT, "Сумма за содержание (mdl.)", Utils.getImage("images/amount.png"));
 
             extendedTextFieldNumber.setInputType(InputTypes.NUMERIC);
             extendedTextFieldRoomsNumber.setInputType(InputTypes.NUMERIC);
