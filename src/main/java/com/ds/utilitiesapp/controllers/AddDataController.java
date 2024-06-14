@@ -1,6 +1,7 @@
 package com.ds.utilitiesapp.controllers;
 
 import com.ds.utilitiesapp.Constants;
+import com.ds.utilitiesapp.Main;
 import com.ds.utilitiesapp.MainPage;
 import com.ds.utilitiesapp.database.tablesConstants.Agents;
 import com.ds.utilitiesapp.database.tablesConstants.Condoles;
@@ -14,9 +15,11 @@ import com.ds.utilitiesapp.utils.actionListeners.IOnAction;
 import com.ds.utilitiesapp.utils.settings.SettingsManager;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import org.jetbrains.annotations.NotNull;
@@ -182,9 +185,13 @@ public class AddDataController {
             ExtendedTextField extendedTextFieldCondoleNumber = new ExtendedTextField(ExtendedTextField.DEFAULT_WIDTH, ExtendedTextField.DEFAULT_HEIGHT, "Номер квартиры", Utils.getImage("images/digits.png"));
             ExtendedTextField extendedTextFieldDate = new ExtendedTextField(ExtendedTextField.DEFAULT_WIDTH, ExtendedTextField.DEFAULT_HEIGHT, "Дата услуги", Utils.getImage("images/all_symbols.png"));
 
+            CheckBox checkBox = new CheckBox("Уплачено в срок");
+            checkBox.setTextFill(Color.WHITE);
+            checkBox.setFont(Font.loadFont(Main.class.getResourceAsStream(Constants.INTER_BOLD_ITALIC_FONT_INPUT_PATH), 16d));
+
             extendedTextFieldCondoleNumber.setInputType(InputTypes.NUMERIC);
 
-            contentVbox.getChildren().addAll(extendedTextFieldName, extendedTextFieldCondoleNumber, extendedTextFieldDate);
+            contentVbox.getChildren().addAll(extendedTextFieldName, extendedTextFieldCondoleNumber, extendedTextFieldDate, checkBox);
             nextButton.setOnAction(actionEvent -> {
                 try {
                     List<ExtendedTextField> emptyFields = Utils.getEmptyFieldsFromArray(new ExtendedTextField[]{extendedTextFieldName, extendedTextFieldCondoleNumber, extendedTextFieldDate});
@@ -194,7 +201,7 @@ public class AddDataController {
                         return;
 
                     RecordsWriter.addService(new ServicesRecord(Services.TABLE_NAME, SettingsManager.getValue(Constants.CURRENT_DATABASE_FILE_KEY), extendedTextFieldName.getText(), extendedTextFieldDate.getText(),
-                            Integer.parseInt(extendedTextFieldCondoleNumber.getText())), SettingsManager.getValue(Constants.CURRENT_DATABASE_FILE_KEY));
+                            Integer.parseInt(extendedTextFieldCondoleNumber.getText()), checkBox.isSelected()), SettingsManager.getValue(Constants.CURRENT_DATABASE_FILE_KEY));
                     closeStage();
                 }catch (Exception e){
                     ErrorDialog.show(e);

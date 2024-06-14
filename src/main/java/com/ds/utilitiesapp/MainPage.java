@@ -2,6 +2,9 @@ package com.ds.utilitiesapp;
 
 import com.ds.utilitiesapp.controllers.AddDataController;
 import com.ds.utilitiesapp.controllers.EditDataController;
+import com.ds.utilitiesapp.database.DatabaseService;
+import com.ds.utilitiesapp.database.tablesConstants.Condoles;
+import com.ds.utilitiesapp.database.tablesConstants.Services;
 import com.ds.utilitiesapp.dialogs.ErrorDialog;
 import com.ds.utilitiesapp.records.*;
 import com.ds.utilitiesapp.records.Record;
@@ -9,10 +12,7 @@ import com.ds.utilitiesapp.utils.AnotherScenes;
 import com.ds.utilitiesapp.utils.RecordsTypes;
 import com.ds.utilitiesapp.utils.Utils;
 import com.ds.utilitiesapp.utils.settings.SettingsManager;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.*;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
@@ -25,6 +25,7 @@ import javafx.stage.Stage;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 
@@ -47,6 +48,7 @@ public class MainPage {
     }
 
     public void init(){
+        checkForPaidServicesInTime();
         checkDatabaseProperty();
         initCategoryLabel();
         initMenuBar();
@@ -56,6 +58,26 @@ public class MainPage {
     private void checkDatabaseProperty() {
         if(!new File(Objects.requireNonNull(SettingsManager.getValue(CURRENT_DATABASE_FILE_KEY))).exists()){
             SettingsManager.changeValue(CURRENT_DATABASE_FILE_KEY, TEMPORARY_DATABASE);
+        }
+    }
+
+    private void checkForPaidServicesInTime(){
+        int lastDay = Integer.parseInt(Objects.requireNonNull(SettingsManager.getValue("previous_day")));
+
+        Objects.requireNonNull(RecordsGetter.getAllServicesRecords()).forEach(servicesRecord -> {
+            if(!servicesRecord.isPaidOnTime()){
+                if(LocalDate.now().getDayOfMonth() > lastDay){
+                    CondolesRecord condolesRecord = CondolesRecord.getCondoleWithNumber(servicesRecord.getCondoleNumber());
+
+                    assert condolesRecord != null;
+                    DatabaseService.changeValue(Condoles.MAINTENANCE_AMOUNT_ROW, String.valueOf(condolesRecord.getMaintenanceAmount() + (condolesRecord.getMaintenanceAmount() * ((LocalDate.now().getDayOfMonth() - lastDay) * 0.1)) / 100), condolesRecord.getId(),
+                            Condoles.TABLE_NAME, SettingsManager.getValue(CURRENT_DATABASE_FILE_KEY));
+                }
+            }
+        });
+
+        if(LocalDate.now().getDayOfMonth() > lastDay){
+            SettingsManager.changeValue("previous_day", String.valueOf(LocalDate.now().getDayOfMonth()));
         }
     }
 
@@ -116,7 +138,10 @@ public class MainPage {
             TableColumn<ServicesRecord, String> servicesRecordDateTableColumn = new TableColumn<>("Дата услуги");
             servicesRecordDateTableColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDate()));
 
-            tableView.getColumns().addAll(servicesRecordIdTableColumn, servicesRecordNameTableColumn, servicesRecordCondoleNumberTableColumn, servicesRecordDateTableColumn);
+            TableColumn<ServicesRecord, Boolean> servicesRecordPaidOnTimeTableColumn = new TableColumn<>("Оплачено в срок");
+            servicesRecordPaidOnTimeTableColumn.setCellValueFactory(cellData -> new SimpleBooleanProperty(cellData.getValue().isPaidOnTime()));
+
+            tableView.getColumns().addAll(servicesRecordIdTableColumn, servicesRecordNameTableColumn, servicesRecordCondoleNumberTableColumn, servicesRecordDateTableColumn, servicesRecordPaidOnTimeTableColumn);
             tableView.setOnMouseClicked(mouseEvent -> {
                 int cellIndex = getSelectedRowIndexFromTableView(tableView);
                 if(cellIndex < 0)

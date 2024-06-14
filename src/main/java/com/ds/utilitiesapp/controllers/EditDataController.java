@@ -1,6 +1,7 @@
 package com.ds.utilitiesapp.controllers;
 
 import com.ds.utilitiesapp.Constants;
+import com.ds.utilitiesapp.Main;
 import com.ds.utilitiesapp.MainPage;
 import com.ds.utilitiesapp.database.DatabaseService;
 import com.ds.utilitiesapp.database.tablesConstants.Agents;
@@ -16,7 +17,9 @@ import com.ds.utilitiesapp.utils.Utils;
 import com.ds.utilitiesapp.utils.actionListeners.IOnAction;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
@@ -145,7 +148,6 @@ public class EditDataController {
             extendedTextFieldSquare.setOnTextTyping(text -> setMaintenanceAmountTextInTextField(extendedTextFieldRoomsNumber, extendedTextFieldPeopleNumber, extendedTextFieldSquare, extendedTextFieldMaintenanceAmount));
             extendedTextFieldPeopleNumber.setOnTextTyping(text -> setMaintenanceAmountTextInTextField(extendedTextFieldRoomsNumber, extendedTextFieldPeopleNumber, extendedTextFieldSquare, extendedTextFieldMaintenanceAmount));
 
-
             contentVbox.getChildren().addAll(extendedTextFieldNumber, extendedTextFieldOwnerName, extendedTextFieldRoomsNumber, extendedTextFieldPeopleNumber, extendedTextFieldMaintenanceAmount);
             buttonNext.setOnAction(actionEvent -> {
                 try {
@@ -184,13 +186,17 @@ public class EditDataController {
             ExtendedTextField extendedTextFieldCondoleNumber = new ExtendedTextField(ExtendedTextField.DEFAULT_WIDTH, ExtendedTextField.DEFAULT_HEIGHT, "Номер квартиры", Utils.getImage("images/digits.png"));
             ExtendedTextField extendedTextFieldDate = new ExtendedTextField(ExtendedTextField.DEFAULT_WIDTH, ExtendedTextField.DEFAULT_HEIGHT, "Дата услуги", Utils.getImage("images/all_symbols.png"));
 
+            CheckBox checkBox = new CheckBox("Уплачено в срок");
+            checkBox.setTextFill(Color.WHITE);
+            checkBox.setFont(Font.loadFont(Main.class.getResourceAsStream(Constants.INTER_BOLD_ITALIC_FONT_INPUT_PATH), 16d));
+
             extendedTextFieldCondoleNumber.setInputType(InputTypes.NUMERIC);
 
             extendedTextFieldName.setText(servicesRecord.getName());
             extendedTextFieldCondoleNumber.setText(String.valueOf(servicesRecord.getCondoleNumber()));
             extendedTextFieldDate.setText(servicesRecord.getDate());
 
-            contentVbox.getChildren().addAll(extendedTextFieldName, extendedTextFieldCondoleNumber, extendedTextFieldDate);
+            contentVbox.getChildren().addAll(extendedTextFieldName, extendedTextFieldCondoleNumber, extendedTextFieldDate, checkBox);
             buttonNext.setOnAction(actionEvent -> {
                 try {
                     if (hasEmptyFields(new ExtendedTextField[]{extendedTextFieldName, extendedTextFieldCondoleNumber, extendedTextFieldDate}))
@@ -201,6 +207,7 @@ public class EditDataController {
                     DatabaseService.changeValue(Services.NAME_ROW, extendedTextFieldName.getText(), servicesRecord.getId(), Services.TABLE_NAME, servicesRecord.getDatabasePath());
                     DatabaseService.changeValue(Services.CONDOLE_NUMBER_ROW, extendedTextFieldCondoleNumber.getText(), servicesRecord.getId(), Services.TABLE_NAME, servicesRecord.getDatabasePath());
                     DatabaseService.changeValue(Services.DATE_ROW, extendedTextFieldDate.getText(), servicesRecord.getId(), Services.TABLE_NAME, servicesRecord.getDatabasePath());
+                    DatabaseService.changeValue(Services.PAID_ON_TIME, String.valueOf(checkBox.isSelected()), servicesRecord.getId(), Services.TABLE_NAME, servicesRecord.getDatabasePath());
 
                     closeStage();
                 }catch (Exception e){

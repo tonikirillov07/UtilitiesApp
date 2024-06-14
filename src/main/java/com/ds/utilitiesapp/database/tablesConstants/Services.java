@@ -5,4 +5,5 @@ public final class Services {
     public static final String NAME_ROW = "name";
     public static final String CONDOLE_NUMBER_ROW = "condole_number";
     public static final String DATE_ROW = "date";
+    public static final String PAID_ON_TIME = "paid_on_time";
 }

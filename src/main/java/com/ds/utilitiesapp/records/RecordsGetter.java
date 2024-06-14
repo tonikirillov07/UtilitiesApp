@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Objects;
 
 import static com.ds.utilitiesapp.database.DatabaseConstants.ID_ROW;
+import static com.ds.utilitiesapp.database.tablesConstants.Services.PAID_ON_TIME;
 
 public class RecordsGetter {
     @Contract(pure = true)
@@ -78,7 +79,7 @@ public class RecordsGetter {
             List<ServicesRecord> servicesRecords = new ArrayList<>();
             while (resultSet.next()){
                 servicesRecords.add(new ServicesRecord(Services.TABLE_NAME, SettingsManager.getValue(Constants.CURRENT_DATABASE_FILE_KEY), resultSet.getLong(ID_ROW),
-                        resultSet.getString(Services.NAME_ROW), resultSet.getString(Services.DATE_ROW), resultSet.getInt(Services.CONDOLE_NUMBER_ROW)));
+                        resultSet.getString(Services.NAME_ROW), resultSet.getString(Services.DATE_ROW), resultSet.getInt(Services.CONDOLE_NUMBER_ROW), DatabaseService.getBoolean(resultSet.getString(PAID_ON_TIME))));
             }
 
             return servicesRecords;

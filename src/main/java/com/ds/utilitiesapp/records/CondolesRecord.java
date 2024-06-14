@@ -10,6 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.Objects;
 
+import static com.ds.utilitiesapp.database.DatabaseConstants.ID_ROW;
 import static com.ds.utilitiesapp.utils.Utils.convertMdlToDollars;
 
 public class CondolesRecord extends Record{
@@ -63,6 +64,27 @@ public class CondolesRecord extends Record{
         }
 
         return false;
+    }
+
+    public static CondolesRecord getCondoleWithNumber(int number){
+        try {
+            String select = "SELECT * FROM " + Condoles.TABLE_NAME + " WHERE " + Condoles.NUMBER_ROW + "=" + number;
+            PreparedStatement preparedStatement = Objects.requireNonNull(DatabaseService.getConnection(SettingsManager.getValue(Constants.CURRENT_DATABASE_FILE_KEY))).prepareStatement(select);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            CondolesRecord condolesRecord = new CondolesRecord(Condoles.TABLE_NAME, SettingsManager.getValue(Constants.CURRENT_DATABASE_FILE_KEY), resultSet.getLong(ID_ROW),
+                    resultSet.getString(Condoles.OWNER_NAME_ROW), resultSet.getInt(Condoles.PEOPLE_NUMBER_ROW), resultSet.getInt(Condoles.ROOMS_NUMBER_ROW), resultSet.getInt(Condoles.NUMBER_ROW),
+                    resultSet.getDouble(Condoles.MAINTENANCE_AMOUNT_ROW), resultSet.getDouble(Condoles.SQUARE_ROW));
+
+            resultSet.close();
+            preparedStatement.close();
+
+            return condolesRecord;
+        }catch (Exception e){
+            ErrorDialog.show(e);
+        }
+
+        return null;
     }
 
     public double getSquare() {
