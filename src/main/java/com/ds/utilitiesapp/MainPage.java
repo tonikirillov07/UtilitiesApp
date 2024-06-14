@@ -70,7 +70,8 @@ public class MainPage {
                     CondolesRecord condolesRecord = CondolesRecord.getCondoleWithNumber(servicesRecord.getCondoleNumber());
 
                     assert condolesRecord != null;
-                    DatabaseService.changeValue(Condoles.MAINTENANCE_AMOUNT_ROW, String.valueOf(condolesRecord.getMaintenanceAmount() + (condolesRecord.getMaintenanceAmount() * ((LocalDate.now().getDayOfMonth() - lastDay) * 0.1)) / 100), condolesRecord.getId(),
+                    DatabaseService.changeValue(Condoles.MAINTENANCE_AMOUNT_ROW, String.valueOf(condolesRecord.getMaintenanceAmount() +
+                                    (condolesRecord.getMaintenanceAmount() * ((LocalDate.now().getDayOfMonth() - lastDay) * 0.1)) / 100), condolesRecord.getId(),
                             Condoles.TABLE_NAME, SettingsManager.getValue(CURRENT_DATABASE_FILE_KEY));
                 }
             }

@@ -5,6 +5,7 @@ import com.ds.utilitiesapp.database.DatabaseService;
 import com.ds.utilitiesapp.database.tablesConstants.Condoles;
 import com.ds.utilitiesapp.dialogs.ErrorDialog;
 import com.ds.utilitiesapp.utils.settings.SettingsManager;
+import org.jetbrains.annotations.Nullable;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -66,7 +67,7 @@ public class CondolesRecord extends Record{
         return false;
     }
 
-    public static CondolesRecord getCondoleWithNumber(int number){
+    public static @Nullable CondolesRecord getCondoleWithNumber(int number){
         try {
             String select = "SELECT * FROM " + Condoles.TABLE_NAME + " WHERE " + Condoles.NUMBER_ROW + "=" + number;
             PreparedStatement preparedStatement = Objects.requireNonNull(DatabaseService.getConnection(SettingsManager.getValue(Constants.CURRENT_DATABASE_FILE_KEY))).prepareStatement(select);

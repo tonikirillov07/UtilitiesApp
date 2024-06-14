@@ -48,11 +48,13 @@ public class RecordsWriter {
 
     public static void addService(ServicesRecord servicesRecord, String databasePath){
         try {
-            String add = "INSERT INTO " + Services.TABLE_NAME + "(" + Services.NAME_ROW + "," + Services.CONDOLE_NUMBER_ROW + "," + Services.DATE_ROW + ") VALUES(?,?,?)";
+            String add = "INSERT INTO " + Services.TABLE_NAME + "(" + Services.NAME_ROW + "," + Services.CONDOLE_NUMBER_ROW + "," +
+                    Services.DATE_ROW + "," + Services.PAID_ON_TIME + ") VALUES(?,?,?,?)";
             PreparedStatement preparedStatement = Objects.requireNonNull(DatabaseService.getConnection(databasePath)).prepareStatement(add);
             preparedStatement.setString(1, servicesRecord.getName());
             preparedStatement.setInt(2, servicesRecord.getCondoleNumber());
             preparedStatement.setString(3, servicesRecord.getDate());
+            preparedStatement.setBoolean(4, servicesRecord.isPaidOnTime());
 
             preparedStatement.executeUpdate();
             preparedStatement.close();
