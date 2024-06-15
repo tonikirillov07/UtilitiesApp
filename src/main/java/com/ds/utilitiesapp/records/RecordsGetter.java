@@ -36,7 +36,7 @@ public class RecordsGetter {
             while (resultSet.next()){
                 agentRecords.add(new AgentRecord(Agents.TABLE_NAME, SettingsManager.getValue(Constants.CURRENT_DATABASE_FILE_KEY), resultSet.getLong(ID_ROW),
                         resultSet.getString(Agents.NAME_ROW), resultSet.getString(Agents.SURNAME_ROW), resultSet.getString(Agents.ADDRESS_ROW), resultSet.getString(Agents.TELEPHONE_ROW),
-                        resultSet.getInt(Agents.PERSONAL_CODE_ROW), resultSet.getDouble(Agents.PAYMENTS_ROW)));
+                        resultSet.getInt(Agents.PERSONAL_CODE_ROW), resultSet.getDouble(Agents.PAYMENTS_ROW), resultSet.getInt(Agents.CONDOLE_NUMBER)));
             }
 
             return agentRecords;

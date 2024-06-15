@@ -80,9 +80,11 @@ public class EditDataController {
             ExtendedTextField extendedTextFieldPersonalCode = new ExtendedTextField(ExtendedTextField.DEFAULT_WIDTH, ExtendedTextField.DEFAULT_HEIGHT, "Персональный код", Utils.getImage("images/digits.png"));
             ExtendedTextField extendedTextFieldAddress = new ExtendedTextField(ExtendedTextField.DEFAULT_WIDTH, ExtendedTextField.DEFAULT_HEIGHT, "Адрес проживания", Utils.getImage("images/all_symbols.png"));
             ExtendedTextField extendedTextFieldTelephone = new ExtendedTextField(ExtendedTextField.DEFAULT_WIDTH, ExtendedTextField.DEFAULT_HEIGHT, "Телефон", Utils.getImage("images/telephone.png"));
+            ExtendedTextField extendedTextFieldCondoleNumber = new ExtendedTextField(ExtendedTextField.DEFAULT_WIDTH, ExtendedTextField.DEFAULT_HEIGHT, "Номер обслуживаемой квартиры", Utils.getImage("images/digits.png"));
             ExtendedTextField extendedTextFieldPayments = new ExtendedTextField(ExtendedTextField.DEFAULT_WIDTH, ExtendedTextField.DEFAULT_HEIGHT, "Ежемесячные выплаты", Utils.getImage("images/amount.png"));
 
             extendedTextFieldPersonalCode.setInputType(InputTypes.NUMERIC);
+            extendedTextFieldCondoleNumber.setInputType(InputTypes.NUMERIC);
 
             extendedTextFieldName.setText(agentRecord.getName());
             extendedTextFieldSurname.setText(agentRecord.getSurname());
@@ -90,8 +92,25 @@ public class EditDataController {
             extendedTextFieldAddress.setText(agentRecord.getAddress());
             extendedTextFieldTelephone.setText(agentRecord.getTelephone());
             extendedTextFieldPayments.setText(String.valueOf(agentRecord.getPayments()));
+            extendedTextFieldCondoleNumber.setText(String.valueOf(agentRecord.getCondoleNumber()));
 
-            contentVbox.getChildren().addAll(extendedTextFieldName, extendedTextFieldSurname, extendedTextFieldPersonalCode, extendedTextFieldAddress, extendedTextFieldTelephone, extendedTextFieldPayments);
+            extendedTextFieldCondoleNumber.setOnTextTyping(text -> {
+                try {
+                    Integer.parseInt(extendedTextFieldCondoleNumber.getText());
+
+                    if (CondolesRecord.findCondoleWithNumber(Integer.parseInt(extendedTextFieldCondoleNumber.getText()))) {
+                        CondolesRecord condolesRecord = CondolesRecord.getCondoleWithNumber(Integer.parseInt(extendedTextFieldCondoleNumber.getText()));
+
+                        try {
+                            assert condolesRecord != null;
+                            extendedTextFieldPayments.setText(String.valueOf(condolesRecord.getMaintenanceAmount()));
+                        } catch (Exception ignored) {
+                        }
+                    }
+                }catch (Exception ignored){}
+            });
+
+            contentVbox.getChildren().addAll(extendedTextFieldName, extendedTextFieldSurname, extendedTextFieldPersonalCode, extendedTextFieldAddress, extendedTextFieldTelephone, extendedTextFieldPayments, extendedTextFieldCondoleNumber);
             buttonNext.setOnAction(actionEvent -> {
                 try {
                     if (hasEmptyFields(new ExtendedTextField[]{extendedTextFieldName, extendedTextFieldSurname, extendedTextFieldPersonalCode, extendedTextFieldAddress, extendedTextFieldTelephone, extendedTextFieldPayments}))
@@ -110,6 +129,7 @@ public class EditDataController {
                     DatabaseService.changeValue(Agents.ADDRESS_ROW, extendedTextFieldAddress.getText(), agentRecord.getId(), Agents.TABLE_NAME, agentRecord.getDatabasePath());
                     DatabaseService.changeValue(Agents.TELEPHONE_ROW, extendedTextFieldTelephone.getText(), agentRecord.getId(), Agents.TABLE_NAME, agentRecord.getDatabasePath());
                     DatabaseService.changeValue(Agents.PAYMENTS_ROW, extendedTextFieldPayments.getText(), agentRecord.getId(), Agents.TABLE_NAME, agentRecord.getDatabasePath());
+                    DatabaseService.changeValue(Agents.CONDOLE_NUMBER, extendedTextFieldCondoleNumber.getText(), agentRecord.getId(), Agents.TABLE_NAME, agentRecord.getDatabasePath());
 
                     closeStage();
                 }catch (Exception e){

@@ -12,7 +12,7 @@ import java.util.Objects;
 public class RecordsWriter {
     public static void addAgent(AgentRecord agentRecord, String databasePath){
         try {
-            String add = "INSERT INTO " + Agents.TABLE_NAME + "(" + Agents.NAME_ROW + "," + Agents.SURNAME_ROW + "," + Agents.PERSONAL_CODE_ROW + "," + Agents.ADDRESS_ROW + "," + Agents.TELEPHONE_ROW + "," + Agents.PAYMENTS_ROW + ") VALUES(?,?,?,?,?,?)";
+            String add = "INSERT INTO " + Agents.TABLE_NAME + "(" + Agents.NAME_ROW + "," + Agents.SURNAME_ROW + "," + Agents.PERSONAL_CODE_ROW + "," + Agents.ADDRESS_ROW + "," + Agents.TELEPHONE_ROW + "," + Agents.PAYMENTS_ROW + "," + Agents.CONDOLE_NUMBER + ") VALUES(?,?,?,?,?,?,?)";
             PreparedStatement preparedStatement = Objects.requireNonNull(DatabaseService.getConnection(databasePath)).prepareStatement(add);
             preparedStatement.setString(1, agentRecord.getName());
             preparedStatement.setString(2, agentRecord.getSurname());
@@ -20,6 +20,7 @@ public class RecordsWriter {
             preparedStatement.setString(4, agentRecord.getAddress());
             preparedStatement.setString(5, agentRecord.getTelephone());
             preparedStatement.setDouble(6, agentRecord.getPayments());
+            preparedStatement.setInt(7, agentRecord.getCondoleNumber());
 
             preparedStatement.executeUpdate();
             preparedStatement.close();

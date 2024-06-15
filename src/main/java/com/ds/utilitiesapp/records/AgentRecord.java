@@ -14,7 +14,7 @@ import static com.ds.utilitiesapp.utils.Utils.convertMdlToDollars;
 
 public class AgentRecord extends Record{
     private String name, surname, address, telephone;
-    private int personalCode;
+    private int personalCode, condoleNumber;
     private double payments;
 
     public AgentRecord(){
@@ -22,7 +22,7 @@ public class AgentRecord extends Record{
 
     }
 
-    public AgentRecord(String tableName, String databasePath, String name, String surname, String address, String telephone, int personalCode, double payments) {
+    public AgentRecord(String tableName, String databasePath, String name, String surname, String address, String telephone, int personalCode, double payments, int condoleNumber) {
         super(tableName, databasePath);
         this.name = name;
         this.surname = surname;
@@ -30,9 +30,10 @@ public class AgentRecord extends Record{
         this.telephone = telephone;
         this.personalCode = personalCode;
         this.payments = payments;
+        this.condoleNumber = condoleNumber;
     }
 
-    public AgentRecord(String tableName, String databasePath, long id, String name, String surname, String address, String telephone, int personalCode, double payments) {
+    public AgentRecord(String tableName, String databasePath, long id, String name, String surname, String address, String telephone, int personalCode, double payments, int condoleNumber) {
         super(tableName, databasePath, id);
         this.name = name;
         this.surname = surname;
@@ -40,6 +41,7 @@ public class AgentRecord extends Record{
         this.telephone = telephone;
         this.personalCode = personalCode;
         this.payments = payments;
+        this.condoleNumber = condoleNumber;
     }
 
     public static boolean findAgentWithPersonalCode(int personalCode){
@@ -59,6 +61,14 @@ public class AgentRecord extends Record{
         }
 
         return false;
+    }
+
+    public int getCondoleNumber() {
+        return condoleNumber;
+    }
+
+    public void setCondoleNumber(int condoleNumber) {
+        this.condoleNumber = condoleNumber;
     }
 
     public double getPaymentInDollars(){

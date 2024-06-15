@@ -100,9 +100,8 @@ public class AddDataController {
                     CondolesRecord condolesRecord = CondolesRecord.getCondoleWithNumber(Integer.parseInt(extendedTextFieldCondoleNumber.getText()));
 
                     try{
-                        double enteredPayments = Double.parseDouble(extendedTextFieldPayments.getText());
                         assert condolesRecord != null;
-                        extendedTextFieldPayments.setText(String.valueOf(enteredPayments + condolesRecord.getMaintenanceAmount()));
+                        extendedTextFieldPayments.setText(String.valueOf(condolesRecord.getMaintenanceAmount()));
                     }catch (Exception ignore){}
                 }
             });
@@ -130,7 +129,7 @@ public class AddDataController {
                         return;
 
                     RecordsWriter.addAgent(new AgentRecord(Agents.TABLE_NAME, SettingsManager.getValue(Constants.CURRENT_DATABASE_FILE_KEY), extendedTextFieldName.getText(), extendedTextFieldSurname.getText(),
-                            extendedTextFieldAddress.getText(), extendedTextFieldTelephone.getText(), Integer.parseInt(extendedTextFieldPersonalCode.getText()), Double.parseDouble(extendedTextFieldPayments.getText())), SettingsManager.getValue(Constants.CURRENT_DATABASE_FILE_KEY));
+                            extendedTextFieldAddress.getText(), extendedTextFieldTelephone.getText(), Integer.parseInt(extendedTextFieldPersonalCode.getText()), Double.parseDouble(extendedTextFieldPayments.getText()), Integer.parseInt(extendedTextFieldCondoleNumber.getText())), SettingsManager.getValue(Constants.CURRENT_DATABASE_FILE_KEY));
                     closeStage();
                 }catch (Exception e){
                     ErrorDialog.show(e);
