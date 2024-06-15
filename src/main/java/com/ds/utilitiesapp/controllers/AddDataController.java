@@ -12,6 +12,7 @@ import com.ds.utilitiesapp.records.*;
 import com.ds.utilitiesapp.utils.InputTypes;
 import com.ds.utilitiesapp.utils.Utils;
 import com.ds.utilitiesapp.utils.actionListeners.IOnAction;
+import com.ds.utilitiesapp.utils.actionListeners.IOnTextTyping;
 import com.ds.utilitiesapp.utils.settings.SettingsManager;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -88,14 +89,28 @@ public class AddDataController {
             ExtendedTextField extendedTextFieldPersonalCode = new ExtendedTextField(ExtendedTextField.DEFAULT_WIDTH, ExtendedTextField.DEFAULT_HEIGHT, "Персональный код", Utils.getImage("images/digits.png"));
             ExtendedTextField extendedTextFieldAddress = new ExtendedTextField(ExtendedTextField.DEFAULT_WIDTH, ExtendedTextField.DEFAULT_HEIGHT, "Адрес проживания", Utils.getImage("images/all_symbols.png"));
             ExtendedTextField extendedTextFieldTelephone = new ExtendedTextField(ExtendedTextField.DEFAULT_WIDTH, ExtendedTextField.DEFAULT_HEIGHT, "Телефон", Utils.getImage("images/telephone.png"));
+            ExtendedTextField extendedTextFieldCondoleNumber = new ExtendedTextField(ExtendedTextField.DEFAULT_WIDTH, ExtendedTextField.DEFAULT_HEIGHT, "Номер обслуживаемой квартиры", Utils.getImage("images/digits.png"));
             ExtendedTextField extendedTextFieldPayments = new ExtendedTextField(ExtendedTextField.DEFAULT_WIDTH, ExtendedTextField.DEFAULT_HEIGHT, "Ежемесячные выплаты (mdl)", Utils.getImage("images/payments.png"));
 
             extendedTextFieldPersonalCode.setInputType(InputTypes.NUMERIC);
+            extendedTextFieldCondoleNumber.setInputType(InputTypes.NUMERIC);
 
-            contentVbox.getChildren().addAll(extendedTextFieldName, extendedTextFieldSurname, extendedTextFieldPersonalCode, extendedTextFieldAddress, extendedTextFieldTelephone, extendedTextFieldPayments);
+            extendedTextFieldCondoleNumber.setOnTextTyping(text -> {
+                if(CondolesRecord.findCondoleWithNumber(Integer.parseInt(extendedTextFieldCondoleNumber.getText()))){
+                    CondolesRecord condolesRecord = CondolesRecord.getCondoleWithNumber(Integer.parseInt(extendedTextFieldCondoleNumber.getText()));
+
+                    try{
+                        double enteredPayments = Double.parseDouble(extendedTextFieldPayments.getText());
+                        assert condolesRecord != null;
+                        extendedTextFieldPayments.setText(String.valueOf(enteredPayments + condolesRecord.getMaintenanceAmount()));
+                    }catch (Exception ignore){}
+                }
+            });
+
+            contentVbox.getChildren().addAll(extendedTextFieldName, extendedTextFieldSurname, extendedTextFieldPersonalCode, extendedTextFieldAddress, extendedTextFieldTelephone, extendedTextFieldPayments, extendedTextFieldCondoleNumber);
             nextButton.setOnAction(actionEvent -> {
                 try {
-                    List<ExtendedTextField> emptyFields = Utils.getEmptyFieldsFromArray(new ExtendedTextField[]{extendedTextFieldName, extendedTextFieldSurname, extendedTextFieldPersonalCode, extendedTextFieldAddress, extendedTextFieldTelephone, extendedTextFieldPayments});
+                    List<ExtendedTextField> emptyFields = Utils.getEmptyFieldsFromArray(new ExtendedTextField[]{extendedTextFieldName, extendedTextFieldSurname, extendedTextFieldPersonalCode, extendedTextFieldAddress, extendedTextFieldTelephone, extendedTextFieldPayments, extendedTextFieldCondoleNumber});
                     emptyFields.forEach(ExtendedTextField::setError);
 
                     if (!emptyFields.isEmpty())
@@ -103,6 +118,11 @@ public class AddDataController {
 
                     if (AgentRecord.findAgentWithPersonalCode(Integer.parseInt(extendedTextFieldPersonalCode.getText()))) {
                         ErrorDialog.show(new IllegalArgumentException("Агент с таким кодом уже существует"));
+                        return;
+                    }
+
+                    if(!CondolesRecord.findCondoleWithNumber(Integer.parseInt(extendedTextFieldCondoleNumber.getText()))){
+                        ErrorDialog.show(new IllegalArgumentException("Такой квартиры не существует"));
                         return;
                     }
 
